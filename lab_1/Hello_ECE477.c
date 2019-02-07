@@ -5,7 +5,8 @@
  * This program prints the string "Hello World" a number of times
  * equal to the size of a supplied native data type in bytes. 
  *
- * Supported data types are: int, double, float, long int, short int and char. 
+ * Supported data types are: int, double, float, long int (long) , short int (short) and char. 
+ * Long int and short in must be entered as "long" and "short" respecively.
  * The program uses strtol to convert an input string into a numeric key in
  * base 32 that is compared against a list to find the correct output.
  * A limitation of the current method of using definitons to compare against
@@ -16,6 +17,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
+//Numerial keys used for comparison with command line input
 #define INT 19197
 #define DOUBLE 462368430
 #define FLOAT 16441693
@@ -23,6 +25,7 @@
 #define SHORT 29942653
 #define CHAR 410971
 
+//Prints the string "Hello World!" a number of times equal to num.
 void printHello(int num);
 
 int main(int argc, char **argv)
@@ -34,7 +37,7 @@ int main(int argc, char **argv)
 		printHello(sizeof(double));
 		return 0;
 	}
-	
+	//strtol converts to a base 32 integer because there is a uniquie output for each data type supported when parsed by it	
 	switch(strtol(argv[1],NULL,32)){
 	case INT:
 		printf("Printing \"Hello World!\" a number of times equal to the number of bytes in an int:\n");
@@ -70,6 +73,7 @@ int main(int argc, char **argv)
 }
 
 
+//Prints the string "Hello World!" a number of times equal to num.
 void printHello(int num)
 {
 	int i = 0;
