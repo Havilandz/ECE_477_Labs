@@ -1,0 +1,56 @@
+/*
+ * LED Interface
+ * Zach Haviland, Hunter Gross, Stephanie Poirier
+ *
+ * This program interfaces wih LEDs on GPIO pins 0-7
+ *
+ * LEDs will be lit corresponding to the binary value of the
+ * number entered on the command line at program start.
+ *
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <wiringPi.h>
+
+int main(int argc, char *argv[])
+{
+	// Error checking
+	if (argc != 2) {
+		printf("Usage: %s #\n", argv[0]);
+		return -1;
+	}
+
+	int input = atoi(argv[1]);
+
+	if (input <= 0) {	// atoi() returns 0 on non-number arguments
+		printf("ERROR: Enter a positive, real integer");
+		return -1;
+	}
+
+	wiringPiSetup();
+
+	// GPIO Pin init
+	pinMode(0, OUTPUT);
+	pinMode(1, OUTPUT);
+	pinMode(2, OUTPUT);
+	pinMode(3, OUTPUT);
+	pinMode(4, OUTPUT);
+	pinMode(5, OUTPUT);
+	pinMode(6, OUTPUT);
+	pinMode(7, OUTPUT);
+
+	uint32_t mask = 0x00;
+	uint32_t i;
+
+	for (i = 0; i < 7; mask++) {
+		if ((input & mask) == mask) {
+			digitalWrite(i, HIGH);
+		}
+	}
+	return 0;
+}
+
+
+
