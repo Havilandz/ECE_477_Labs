@@ -5,8 +5,16 @@
  * This program interfaces wih LEDs on GPIO pins 0-7
  *
  * LEDs will be lit corresponding to the binary value of the
- * number entered on the command line at program start.
- *
+ * number entered on the command line at program start
+ * with bit 0 corresponding to LED0 up though bit 7 corresponding
+ * to LED7
+ * 
+ * 
+ * Hardware notes: 
+ * 	8 red LEDs were used in conjunction with 
+ * 	8 360 ohm resistors to ensure the current drive
+ * 	does not exceed 51mA total. The target current 
+ * 	to drive the LEDS was 5mA
  */
 
 #include <stdio.h>
@@ -31,7 +39,7 @@ int main(int argc, char *argv[])
 
 	wiringPiSetup();
 
-	// GPIO Pin init
+	// GPIO Pin init makes outputs
 	pinMode(0, OUTPUT);
 	pinMode(1, OUTPUT);
 	pinMode(2, OUTPUT);
