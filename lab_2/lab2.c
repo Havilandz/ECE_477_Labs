@@ -37,6 +37,11 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
+	if ((input < 0) || (input > 255)) {
+		printf("Enter an integer between 0x00 and 0xff");
+		return -1
+	}
+
 	wiringPiSetup();
 
 	// GPIO Pin init makes outputs
@@ -52,9 +57,12 @@ int main(int argc, char *argv[])
 	uint32_t mask = 0x00;
 	uint32_t i;
 
-	for (i = 0; i < 7; mask++) {
+	for (i = 0; i < 7; mask<<=1,i++) {
 		if ((input & mask) == mask) {
 			digitalWrite(i, HIGH);
+		}
+		else {
+			digitalWrite(i, LOW);
 		}
 	}
 	return 0;
