@@ -1,0 +1,15 @@
+#! /bin/bash
+gcc -Wall -lwiringPi -o LED -g lab2.c
+
+
+
+
+
+
+
+
+
+
+
+
+

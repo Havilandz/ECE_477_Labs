@@ -24,13 +24,17 @@
 
 int main(int argc, char *argv[])
 {
+
+	uint32_t mask = 0x00;
+	uint32_t i;
+	int input = 0;
 	// Error checking
 	if (argc != 2) {	// There must be an argument for the program to work
 		printf("Usage: %s #\n", argv[0]);
 		return -1;
 	}
 
-	int input = atoi(argv[1]);
+	input = atoi(argv[1]);
 
 	if (input < 0) {	// Negative results don't make sense in this context
 		printf("ERROR: Enter a positive, real integer");
@@ -53,9 +57,6 @@ int main(int argc, char *argv[])
 	pinMode(5, OUTPUT);
 	pinMode(6, OUTPUT);
 	pinMode(7, OUTPUT);
-
-	uint32_t mask = 0x00;
-	uint32_t i;
 
 	// Enter 0 to set all leds to low/off
 	if (input == 0) {
