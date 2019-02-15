@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
 	int input = 0;
 	// Error checking
 	if (argc != 2) {	// There must be an argument for the program to work
-		printf("Usage: %s #\n", argv[0]);
+		printf("Usage: %s NUMBER\n", argv[0]);
 		return -1;
 	}
 

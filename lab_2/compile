@@ -1,5 +1,5 @@
 #! /bin/bash
-gcc -Wall -lwiringPi -o LED -g lab2.c
+gcc -Wall -lwiringPi -o ledctrl -g lab2.c
 
 
 
