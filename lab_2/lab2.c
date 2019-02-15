@@ -8,12 +8,12 @@
  * number entered on the command line at program start
  * with bit 0 corresponding to LED0 up though bit 7 corresponding
  * to LED7
- * 
- * 
- * Hardware notes: 
- * 	8 red LEDs were used in conjunction with 
+ *
+ *
+ * Hardware notes:
+ * 	8 red LEDs were used in conjunction with
  * 	8 360 ohm resistors to ensure the current drive
- * 	does not exceed 51mA total. The target current 
+ * 	does not exceed 51mA total. The target current
  * 	to drive the LEDS was 5mA
  */
 
@@ -32,14 +32,14 @@ int main(int argc, char *argv[])
 
 	int input = atoi(argv[1]);
 
-	if (input <= 0) {	// atoi() returns 0 on non-number arguments
+	if (input < 0) {	// atoi() returns 0 on non-number arguments
 		printf("ERROR: Enter a positive, real integer");
 		return -1;
 	}
 
 	if ((input < 0) || (input > 255)) {
 		printf("Enter an integer between 0x00 and 0xff");
-		return -1
+		return -1;
 	}
 
 	wiringPiSetup();
@@ -57,16 +57,25 @@ int main(int argc, char *argv[])
 	uint32_t mask = 0x00;
 	uint32_t i;
 
-	for (i = 0; i < 7; mask<<=1,i++) {
-		if ((input & mask) == mask) {
-			digitalWrite(i, HIGH);
-		}
-		else {
+	if (input == 0) {
+		for (i = 0; i < 7; i++) {
 			digitalWrite(i, LOW);
+		}
+	}
+	else {
+
+		for (i = 0; i < 7; mask<<=1,i++) {
+			if ((input & mask) == mask) {
+				digitalWrite(i, HIGH);
+			}
+			else {
+				digitalWrite(i, LOW);
+			}
 		}
 	}
 	return 0;
 }
+
 
 
 
