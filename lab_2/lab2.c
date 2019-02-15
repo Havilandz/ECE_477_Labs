@@ -1,5 +1,5 @@
 /*
- * LED Interface
+ * LED interface
  * Zach Haviland, Hunter Gross, Stephanie Poirier
  *
  * This program interfaces wih LEDs on GPIO pins 0-7
@@ -21,28 +21,41 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <wiringPi.h>
+#include <errno.h>
 
 int main(int argc, char *argv[])
 {
 
-	uint32_t mask = 0x00;
+	uint32_t mask = 0x01;
 	uint32_t i;
-	int input = 0;
+	uint32_t input = 0;
+	/*used for exception handling. Is set by
+	strtod if input is invalid*/
+	errno = 0;
+
+	/* There must be an argument for the program to work
+	Checked here to prevent other problems like seg faults*/
+	if (argc != 2) {
+		fprintf(stderr,"Usage: %s NUMBER\n",argv[0]);
+		return -1;
+	}
+
+	/*Converts input to decimal or hex if the number
+	is prepended by 0x. Functionality implicitly supports
+	octal*/
+	input = (uint32_t)strtod(argv[1],NULL);
+
+
 	// Error checking
-	if (argc != 2) {	// There must be an argument for the program to work
-		printf("Usage: %s NUMBER\n", argv[0]);
+	
+	//Checks errno to ensure strod converted correctly
+	if (errno == ERANGE){
+		fprintf(stderr,"Enter an integer number\n");	
 		return -1;
 	}
-
-	input = atoi(argv[1]);
-
-	if (input < 0) {	// Negative results don't make sense in this context
-		printf("ERROR: Enter a positive, real integer");
-		return -1;
-	}
-
-	if ((input < 0) || (input > 255)) {	// The working values for led masks are only 0-255
-	 	printf("Enter an integer between 0x00 and 0xff");
+	// The working values for led masks are only 0-255
+	if ((input < 0) || (input > 255)) {
+	 	fprintf(stderr,"Enter an integer between 0x00 and 0xff\n");
 		return -1;
 	}
 
@@ -58,23 +71,16 @@ int main(int argc, char *argv[])
 	pinMode(6, OUTPUT);
 	pinMode(7, OUTPUT);
 
-	// Enter 0 to set all leds to low/off
-	if (input == 0) {
-		for (i = 0; i < 8; i++) {
+	// Check each bit of the input and set the corresponding led
+	for (i = 0; i < 8; mask<<=1,i++) {
+		if ((input & mask) == mask) {
+			digitalWrite(i, HIGH);
+		}
+		else {
 			digitalWrite(i, LOW);
 		}
 	}
-	else {
-		// Check each bit of the input and set the corresponding led
-		for (i = 0; i < 8; mask<<=1,i++) {
-			if ((input & mask) == mask) {
-				digitalWrite(i, HIGH);
-			}
-			else {
-				digitalWrite(i, LOW);
-			}
-		}
-	}
+	
 	return 0;
 }
 
