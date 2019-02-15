@@ -11,7 +11,7 @@
  *
  *
  * Hardware notes:
- * 	8 red LEDs were used in conjunction with
+ * 	8 LEDs were used in conjunction with
  * 	8 360 ohm resistors to ensure the current drive
  * 	does not exceed 51mA total. The target current
  * 	to drive the LEDS was 5mA
@@ -25,26 +25,26 @@
 int main(int argc, char *argv[])
 {
 	// Error checking
-	if (argc != 2) {
+	if (argc != 2) {	// There must be an argument for the program to work
 		printf("Usage: %s #\n", argv[0]);
 		return -1;
 	}
 
 	int input = atoi(argv[1]);
 
-	if (input < 0) {	// atoi() returns 0 on non-number arguments
+	if (input < 0) {	// Negative results don't make sense in this context
 		printf("ERROR: Enter a positive, real integer");
 		return -1;
 	}
 
-	if ((input < 0) || (input > 255)) {
-		printf("Enter an integer between 0x00 and 0xff");
+	if ((input < 0) || (input > 255)) {	// The working values for led masks are only 0-255
+	 	printf("Enter an integer between 0x00 and 0xff");
 		return -1;
 	}
 
 	wiringPiSetup();
 
-	// GPIO Pin init makes outputs
+	// GPIO Pin init for each led
 	pinMode(0, OUTPUT);
 	pinMode(1, OUTPUT);
 	pinMode(2, OUTPUT);
@@ -57,13 +57,14 @@ int main(int argc, char *argv[])
 	uint32_t mask = 0x00;
 	uint32_t i;
 
+	// Enter 0 to set all leds to low/off
 	if (input == 0) {
 		for (i = 0; i < 7; i++) {
 			digitalWrite(i, LOW);
 		}
 	}
 	else {
-
+		// Check each bit of the input and set the corresponding led
 		for (i = 0; i < 7; mask<<=1,i++) {
 			if ((input & mask) == mask) {
 				digitalWrite(i, HIGH);
