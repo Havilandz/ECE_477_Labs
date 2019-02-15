@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 	pinMode(7, OUTPUT);
 
 	// Check each bit of the input and set the corresponding led
-	for (i = 0; i < 7; mask<<=1,i++) {
+	for (i = 0; i < 8; mask<<=1,i++) {
 		if ((input & mask) == mask) {
 			digitalWrite(i, HIGH);
 		}
