@@ -1,5 +1,5 @@
 #! /bin/bash
-gcc -Wall -lwiringPi -o ledctl -g lab2.c
+gcc -Wall -lwiringPi -lpthread -o ledctl -g lab2.c
 
 
 
