@@ -60,13 +60,13 @@ int main(int argc, char *argv[])
 
 	// Enter 0 to set all leds to low/off
 	if (input == 0) {
-		for (i = 0; i < 7; i++) {
+		for (i = 0; i < 8; i++) {
 			digitalWrite(i, LOW);
 		}
 	}
 	else {
 		// Check each bit of the input and set the corresponding led
-		for (i = 0; i < 7; mask<<=1,i++) {
+		for (i = 0; i < 8; mask<<=1,i++) {
 			if ((input & mask) == mask) {
 				digitalWrite(i, HIGH);
 			}
