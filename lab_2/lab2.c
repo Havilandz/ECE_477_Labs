@@ -30,9 +30,10 @@ int main(int argc, char *argv[])
 {
 
 	uint32_t mask = 0x01;
-	uint32_t i;
+	uint32_t i = 0;
 	uint32_t input = 0;
-	uint32_t brightness;
+	uint32_t brightness = 0;
+	uint32_t tmp = 0; //temporary storage
 	/*used for exception handling. Is set by
 	strtod if input is invalid*/
 	errno = 0;
@@ -46,8 +47,11 @@ int main(int argc, char *argv[])
 
 	// If there is a brightness argument, it must be between 0 and 100
 	if ((argc == 3) && (atoi(argv[2]) == 0)) {
-		fprintf(stderr,"Brightness must be a decimal integer between 0 and 100\n");
-		return -1;
+		tmp = atoi(argv[2]);
+		if(tmp > 100 || tmp <= 0){
+			fprintf(stderr,"Brightness must be a decimal integer between 0 and 100\n");
+			return -1;
+		}
 	}
 
 	/*Converts input to decimal or hex if the number
@@ -55,7 +59,7 @@ int main(int argc, char *argv[])
 	octal*/
 	input = (uint32_t)strtod(argv[1],NULL);
 
-	// Checks errno to ensure strod converted correctly
+	// Checks errno to ensure strtod converted correctly
 	if (errno == ERANGE){
 		fprintf(stderr,"Enter an integer number\n");
 		return -1;
@@ -66,31 +70,38 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 
-	wiringPiSetup();
+	if(wiringPiSetup() == -1){
+		fprintf(stderr,"WiringPi setup failed");
+		return -1;
+	}
 
 	// GPIO Pin init for each led
-	for (i = 0; i < 8; i++) {
-		pinMode(i, OUTPUT);
-	}
+//	for (i = 0; i < 8; i++) {
+//		pinMode(i, PWM_OUTPUT);
+//	}
 
 	/* Creates software controlled PWM pins for
 	GPIO pins 0-7 */
 	for (i=0; i < 8; i++) {
-		softPwmCreate(i, 0, 100);
+		if(softPwmCreate(i, 0, 100)){
+			fprintf(stderr,"pwm create %d failed\n",i);
+		}
 	}
 
 	// Sets the brightness value, default is 100
+
 	if (argv[2] != NULL) {
 		brightness = atoi(argv[2]);
 	}
 	else {
 		brightness = 100;
 	}
-
+	printf("%d\n",brightness);
 	// Check each bit of the input and set the corresponding led
 	for (i = 0; i < 8; mask<<=1,i++) {
 		if ((input & mask) == mask) {
 			softPwmWrite(i, brightness);
+			printf("%d %d\n",i,brightness);
 		}
 		else {
 			softPwmWrite(i, 0);
