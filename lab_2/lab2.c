@@ -24,27 +24,31 @@
 
 int main(int argc, char *argv[])
 {
+
+	uint32_t mask = 0x00;
+	uint32_t i;
+	int input = 0;
 	// Error checking
 	if (argc != 2) {
 		printf("Usage: %s #\n", argv[0]);
 		return -1;
 	}
 
-	int input = atoi(argv[1]);
+	input = atoi(argv[1]);
 
 	if (input <= 0) {	// atoi() returns 0 on non-number arguments
-		printf("ERROR: Enter a positive, real integer");
+		printf("ERROR: Enter a positive, real integer\n");
 		return -1;
 	}
 
 	if ((input < 0) || (input > 255)) {
-		printf("Enter an integer between 0x00 and 0xff");
-		return -1
+		printf("Enter an integer between 0x00 and 0xff\n");
+		return -1;
 	}
 
 	wiringPiSetup();
 
-	// GPIO Pin init makes outputs
+	// Makes GPIO pins outputs
 	pinMode(0, OUTPUT);
 	pinMode(1, OUTPUT);
 	pinMode(2, OUTPUT);
@@ -53,9 +57,6 @@ int main(int argc, char *argv[])
 	pinMode(5, OUTPUT);
 	pinMode(6, OUTPUT);
 	pinMode(7, OUTPUT);
-
-	uint32_t mask = 0x00;
-	uint32_t i;
 
 	for (i = 0; i < 7; mask<<=1,i++) {
 		if ((input & mask) == mask) {
