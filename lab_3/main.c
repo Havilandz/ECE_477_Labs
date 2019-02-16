@@ -48,39 +48,44 @@ int main(int argc, char *argv[]){
 		//First value encountered is minute load average
 		fscanf(fp, "%lf", &fileval);
 
-		if(fileval >= .125){
+		printf("%.3f\n",fileval); ///For debugging
+
+		if(fileval >= 8){
 			//turn leds <=2 on
 			system("./ledctrl 0x03");
 		}
 
-		if(fileval >= .25) {
+		else if(fileval >= 4) {
 			//turn leds <=3 on
 			system("./ledctrl 0x07");
 		}
 
-		if(fileval >= .5) {
+		else if(fileval >= 2) {
 			//turn leds <=4 on
 			system("./ledctrl 0x0f");
 		}
 
-		if(fileval >= 1) {
+		else if(fileval >= 1) {
 			//turn leds <=5 on
 			system("./ledctrl 0x1f");
 		}
 
-		if(fileval >= 2) {
+		else if(fileval >= 0.5) {
 			//turn leds <=6 on
 			system("./ledctrl 0x3f");
 		}
 
-		if(fileval >= 4) {
+		else if(fileval >= 0.25) {
 			//turn led <=7 on
 			system("./ledctrl 0x7f");
 		}
 
-		if(fileval >= 8) {
+		else if(fileval >= 0.125) {
 			//turn all leds on
 			system("./ledctrl 0xff");
+		}
+		else{
+			system("./ledctrl 0x01");
 		}
 		/* reset pointer to the start of the file */
 		//rewind(fp);
