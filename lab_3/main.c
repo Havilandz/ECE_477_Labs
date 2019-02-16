@@ -6,12 +6,9 @@ Spring 2019
 
 This lab uses the LED control program from LAB 2 to
 implement a system load meter using information from
-/proc/loadavg.
-
-
-
-
-
+/proc/loadavg. Note that he LED control progrm, ledctrl,
+from last lab must be present in the same folder as this
+program for this program to function.
 
 
  */
@@ -19,30 +16,37 @@ implement a system load meter using information from
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <wiringPi.h>
-#include <errno.h>
+
+
 
 int main(int argc, char *argv[]){
 
-	//Pointer to file for file stuff. 
-	FILE *fp = fopen("/proc/loadavg","r");
+	//Holds value read from loadavg
 	double fileval = 0;
-	
-	/* Error checking */
-	if(fp == NULL){
-		printf("error opening file, exiting.");
+	//Used to look at /proc/loadavg
+	FILE *fp = NULL;
+
+
+	/* First LED is always on, also checks that
+	ledctrl is in the file with this program */
+	if(system("./ledctrl 0x01")==-1){
+		printf("error: program ledctrl not present");
 		return 1;
 	}
-	
-	wiringPiSetup(); //Enable wiringPi
-
-
-	/* First LED is always on */
-	system("./ledctrl 0x01");
 
 
 	while(1) {
-		fscanf(fp, "%d", &fileval);
+		
+		fp = fopen("/proc/loadavg","r");
+		
+		/* Error checking */
+		if(fp == NULL){
+			printf("error opening file, exiting.");
+			return 1;
+		}
+		
+		//First value encountered is minute load average
+		fscanf(fp, "%lf", &fileval);
 
 		if(fileval >= .125){
 			//turn leds <=2 on
@@ -79,6 +83,13 @@ int main(int argc, char *argv[]){
 			system("./ledctrl 0xff");
 		}
 		/* reset pointer to the start of the file */
-		rewind(fp);
+		//rewind(fp);
+		
+		//closes file and checks to make sure it succeded
+		if(fclose(fp)){
+			printf("failed to close /proc/loadavg. Aborting program");
+			return 1;
+		}		
+
 	}
 }
