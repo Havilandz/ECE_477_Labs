@@ -37,7 +37,7 @@ int main(int argc, char *argv[]){
 	FILE *angel = NULL;
 	//holds child PID
 	uint32_t cpid = 0;
-	//temporary storeage for strings. 
+	//temporary storage for strings. 
 	char *message = NULL;
 
 	/*kills the process with PID in tombstone
