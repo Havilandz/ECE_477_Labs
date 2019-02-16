@@ -61,7 +61,7 @@ int main(int argc, char *argv[]){
 		run it doesn't try to kill any orphans*/
 		system("rm tombstone");
 		system("./ledctrl 0");
-		printf("Orphan loadmeter killed successfully\n");
+		printf("Orphan loadMeter killed successfully\n");
 		fclose(angel);
 		return 0;
 	}
@@ -70,11 +70,17 @@ int main(int argc, char *argv[]){
 	/* Creates the fork. The parent writes the childs
 	process id to the file tombstone and returns */
 	cpid = fork();
+	
+	//checks to make sure fork worked
+	if(cpid == -1){
+		printf("Failed to create child. Aborting\n");
+		return -1;
+	}
 	/*cpid for parent and child are different values. 
 	This if block only runs in the parent */
 	if(cpid) {
 		angel = fopen("tombstone","w+");
-
+	
 		if(!angel){ // If the fopen fails, exit 
 			printf("Error: Failed to create tombstone\n");
 			return -1;
@@ -83,7 +89,9 @@ int main(int argc, char *argv[]){
 		fclose(angel);
 		return 0;
 	}
-
+	
+	printf("Orphaned child loadMeter running in background\n");
+	
 
 
 	/* First LED is always on, also checks that
