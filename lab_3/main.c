@@ -45,7 +45,7 @@ int main(int argc, char *argv[]){
 	if((angel = fopen("tombstone","r"))){
 		
 		//gets the PID from file
-		fscanf(angel,"%d",&((int)fileval));
+		fscanf(angel,"%d",&fileval);
 		sprintf(message,"kill -9 %i",(int)fileval);
 
 		//Error Checking
