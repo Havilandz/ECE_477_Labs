@@ -1,4 +1,21 @@
+/*
+ECE477 Lab 3: LED CPU load monitor. 
 
+Authors: Steph Poirier, Hunter Gross, Zach Haviland
+Spring 2019
+
+This lab uses the LED control program from LAB 2 to
+implement a system load meter using information from
+/proc/loadavg.
+
+
+
+
+
+
+
+ */
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -7,8 +24,9 @@
 
 int main(int argc, char *argv[]){
 
+	//Pointer to file for file stuff. 
 	FILE *fp = fopen("/proc/loadavg","r");
-	double fileval;
+	double fileval = 0;
 	
 	/* Error checking */
 	if(fp == NULL){
