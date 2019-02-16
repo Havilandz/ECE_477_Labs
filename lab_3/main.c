@@ -42,23 +42,23 @@ int main(int argc, char *argv[]){
 
 	/*kills the process with PID in tombstone
 	if tombstone exists */ 
-	if(angel = fopen("tombstone","r")){
+	if((angel = fopen("tombstone","r"))){
 		
 		//gets the PID from file
-		fscanf(angel,"%d",&(int)fileval);
+		fscanf(angel,"%d",&((int)fileval));
 		sprintf(message,"kill -9 %i",(int)fileval);
 
 		//Error Checking
-		if(sytem(message) == -1){
+		if(system(message) == -1){
 			printf("Error: Failed to kill orphan");
 			fclose(angel);
-			return 1
+			return 1;
 		}
 		/*get rid of tombstone so next time the program
 		run it doesn't try to kill any orphans*/
 		system("rm tombstone");
-		close(angel);
-		return 0
+		fclose(angel);
+		return 0;
 	}
 
 	fclose(angel);
@@ -73,15 +73,16 @@ int main(int argc, char *argv[]){
 	/* Creates the fork. The parent writes the childs
 	process id to the file tombstone and returns */
 	cpid = fork();
+	/*cpid for parent and child are different values. 
+	This if block only runs in the parent */
 	if(cpid) {
 		angel = fopen("tombstone","w+");
 
 		if(!angel){ // If the fopen fails, exit 
-			printf("Error: Failed to create file tombstone");
+			printf("Error: Failed to create tombstone");
 			return -1;
 		}
-
-		fprintf(angel, "%d", &cpid);
+		fprintf(angel, "%d", cpid);
 		fclose(angel);
 		return 0;
 	}
