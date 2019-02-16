@@ -70,6 +70,21 @@ int main(int argc, char *argv[]){
 		return 1;
 	}
 
+	/* Creates the fork. The parent writes the childs
+	process id to the file tombstone and returns */
+	cpid = fork();
+	if(cpid) {
+		angel = fopen("tombstone","w+");
+
+		if(!angel){ // If the fopen fails, exit 
+			printf("Error: Failed to create file tombstone");
+			return -1;
+		}
+
+		fprintf(angel, "%d", &cpid);
+		fclose(angel);
+		return 0;
+	}
 
 	while(1) {
 
