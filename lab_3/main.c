@@ -38,16 +38,19 @@ int main(int argc, char *argv[]){
 	//holds child PID
 	uint32_t cpid = 0;
 	//temporary storage for strings. 
-	char *message = NULL;
+	char message[30] ;
+
+
 
 	/*kills the process with PID in tombstone
 	if tombstone exists */ 
 	if((angel = fopen("tombstone","r"))){
-		
+
 		//gets the PID from file
 		fscanf(angel,"%lf",&fileval);
-		sprintf(message,"kill -9 %i",(int)fileval);
-
+		
+		sprintf(message,"kill -9 %d",((int)fileval));
+	
 		//Error Checking
 		if(system(message) == -1){
 			printf("Error: Failed to kill orphan");
@@ -68,7 +71,7 @@ int main(int argc, char *argv[]){
 		printf("Error: program ledctrl not present");
 		return 1;
 	}
-
+	
 	/* Creates the fork. The parent writes the childs
 	process id to the file tombstone and returns */
 	cpid = fork();
