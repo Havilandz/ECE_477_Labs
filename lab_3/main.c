@@ -60,8 +60,7 @@ int main(int argc, char *argv[]){
 		fclose(angel);
 		return 0;
 	}
-
-	fclose(angel);
+	
 
 	/* First LED is always on, also checks that
 	ledctrl is in the file with this program */
