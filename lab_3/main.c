@@ -53,24 +53,19 @@ int main(int argc, char *argv[]){
 	
 		//Error Checking
 		if(system(message) == -1){
-			printf("Error: Failed to kill orphan");
+			printf("Error: Failed to kill orphan\n");
 			fclose(angel);
 			return 1;
 		}
 		/*get rid of tombstone so next time the program
 		run it doesn't try to kill any orphans*/
 		system("rm tombstone");
+		system("./ledctrl 0");
+		printf("Orphan loadmeter killed successfully\n");
 		fclose(angel);
 		return 0;
 	}
 
-
-	/* First LED is always on, also checks that
-	ledctrl is in the file with this program */
-	if(system("./ledctrl 0x01")==-1){
-		printf("Error: program ledctrl not present");
-		return 1;
-	}
 	
 	/* Creates the fork. The parent writes the childs
 	process id to the file tombstone and returns */
@@ -81,7 +76,7 @@ int main(int argc, char *argv[]){
 		angel = fopen("tombstone","w+");
 
 		if(!angel){ // If the fopen fails, exit 
-			printf("Error: Failed to create tombstone");
+			printf("Error: Failed to create tombstone\n");
 			return -1;
 		}
 		fprintf(angel, "%d", cpid);
@@ -89,13 +84,23 @@ int main(int argc, char *argv[]){
 		return 0;
 	}
 
+
+
+	/* First LED is always on, also checks that
+	ledctrl is in the file with this program */
+	if(system("./ledctrl 0x01")==-1){
+		printf("Error: program ledctrl not present\n");
+		return 1;
+	}
+
+
 	while(1) {
 
 		fp = fopen("/proc/loadavg","r");
 
 		/* Error checking */
 		if(fp == NULL){
-			printf("error opening file, exiting.");
+			printf("error opening file, exiting\n");
 			return 1;
 		}
 
@@ -145,7 +150,7 @@ int main(int argc, char *argv[]){
 
 		//closes file and checks to make sure it succeded
 		if(fclose(fp)){
-			printf("failed to close /proc/loadavg. Aborting program");
+			printf("failed to close /proc/loadavg. Aborting program\n");
 			return 1;
 		}
 
