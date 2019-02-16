@@ -1,16 +1,24 @@
 /*
-ECE477 Lab 3: LED CPU load monitor.
+ * ECE477 Lab 3: LED CPU load monitor.
+ * 
+ * Authors: Steph Poirier, Hunter Gross, Zach Haviland
+ * Spring 2019
+ * 
+ * This lab uses the LED control program from LAB 2 to
+ * implement a system load meter using information from
+ * /proc/loadavg. Note that he LED control progrm, ledctrl,
+ * from last lab must be present in the same folder as this
+ * program for this program to function.
+ * 
+ * The program will fork itself to create a child which will
+run in the background. The parent will then creat the file
+tombstone and will write the child's process ID to that file 
+then exit, making an orphan.
 
-Authors: Steph Poirier, Hunter Gross, Zach Haviland
-Spring 2019
-
-This lab uses the LED control program from LAB 2 to
-implement a system load meter using information from
-/proc/loadavg. Note that he LED control progrm, ledctrl,
-from last lab must be present in the same folder as this
-program for this program to function.
-
-
+If the program detects that the file tombstone already exists it
+will read the PID from tombstone and kill the process with
+that ID, i.e. the orphaned child. 
+ * 
  */
 #include <unistd.h>
 #include <stdio.h>
@@ -21,16 +29,44 @@ program for this program to function.
 
 int main(int argc, char *argv[]){
 
-	//Holds value read from loadavg
+	//Holds value read from files
 	double fileval = 0;
 	//Used to look at /proc/loadavg
 	FILE *fp = NULL;
+	//used to look at tombstone if it exits
+	FILE *angel = NULL;
+	//holds child PID
+	uint32_t cpid = 0;
+	//temporary storeage for strings. 
+	char *message = NULL;
 
+	/*kills the process with PID in tombstone
+	if tombstone exists */ 
+	if(angel = fopen("tombstone","r")){
+		
+		//gets the PID from file
+		fscanf(angel,"%d",&(int)fileval);
+		sprintf(message,"kill -9 %i",(int)fileval);
+
+		//Error Checking
+		if(sytem(message) == -1){
+			printf("Error: Failed to kill orphan");
+			fclose(angel);
+			return 1
+		}
+		/*get rid of tombstone so next time the program
+		run it doesn't try to kill any orphans*/
+		system("rm tombstone");
+		close(angel);
+		return 0
+	}
+
+	fclose(angel);
 
 	/* First LED is always on, also checks that
 	ledctrl is in the file with this program */
 	if(system("./ledctrl 0x01")==-1){
-		printf("error: program ledctrl not present");
+		printf("Error: program ledctrl not present");
 		return 1;
 	}
 
