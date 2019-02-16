@@ -61,8 +61,6 @@ int main(int argc, char *argv[]){
 		return 0;
 	}
 
-	fclose(angel);
-
 	/* First LED is always on, also checks that
 	ledctrl is in the file with this program */
 	if(system("./ledctrl 0x01")==-1){
@@ -99,8 +97,6 @@ int main(int argc, char *argv[]){
 
 		//First value encountered is minute load average
 		fscanf(fp, "%lf", &fileval);
-
-		printf("%.3f\n",fileval); ///For debugging
 
 		if(fileval >= 8){
 			//turn all leds on
