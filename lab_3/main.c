@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
 	//Used to look at /proc/loadavg
 	FILE *fp = NULL;
 	//used to look at tombstone if it exits
-	FILE *reaper = NULL;
+	FILE *angel = NULL;
 	//holds child PID
 	uint32_t cpid = 0;
 	//temporary storage for strings. 
@@ -44,17 +44,17 @@ int main(int argc, char *argv[]){
 
 	/*kills the process with PID in tombstone
 	if tombstone exists */ 
-	if((reaper = fopen("tombstone","r"))){
+	if((angel = fopen("tombstone","r"))){
 
 		//gets the PID from file
-		fscanf(reaper,"%lf",&fileval);
+		fscanf(angel,"%lf",&fileval);
 		
 		sprintf(message,"kill -9 %d",((int)fileval));
 	
 		//Error Checking
 		if(system(message) == -1){
 			printf("Error: Failed to kill orphan\n");
-			fclose(reaper);
+			fclose(angel);
 			return 1;
 		}
 		/*get rid of tombstone so next time the program
@@ -62,7 +62,7 @@ int main(int argc, char *argv[]){
 		system("rm tombstone");
 		system("./ledctrl 0");
 		printf("Orphan loadMeter killed successfully\n");
-		fclose(reaper);
+		fclose(angel);
 		return 0;
 	}
 
@@ -79,14 +79,14 @@ int main(int argc, char *argv[]){
 	/*cpid for parent and child are different values. 
 	This if block only runs in the parent */
 	if(cpid) {
-		reaper = fopen("tombstone","w+");
+		angel = fopen("tombstone","w+");
 	
-		if(!reaper){ // If the fopen fails, exit 
+		if(!angel){ // If the fopen fails, exit 
 			printf("Error: Failed to create tombstone\n");
 			return -1;
 		}
-		fprintf(reaper, "%d", cpid);
-		fclose(reaper);
+		fprintf(angel, "%d", cpid);
+		fclose(angel);
 		return 0;
 	}
 	
