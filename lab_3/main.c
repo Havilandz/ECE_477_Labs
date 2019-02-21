@@ -51,7 +51,7 @@ int main(int argc, char *argv[]){
 		
 		sprintf(message,"kill -9 %d",((int)fileval));
 	
-		//Error Checking
+		//Error Checking and kill command
 		if(system(message) == -1){
 			printf("Error: Failed to kill orphan\n");
 			fclose(angel);
@@ -59,10 +59,11 @@ int main(int argc, char *argv[]){
 		}
 		/*get rid of tombstone so next time the program
 		run it doesn't try to kill any orphans*/
+		fclose(angel);
 		system("rm tombstone");
 		system("./ledctrl 0");
 		printf("Orphan loadMeter killed successfully\n");
-		fclose(angel);
+
 		return 0;
 	}
 
