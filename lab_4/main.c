@@ -22,12 +22,14 @@
  */
 #include <stdint.h>
 #include "gpioRead.h"
+#include <wiringPi.h>
+#include "ledctrl.h"
 
 #define BOUNCE_DELAY 10
 
 int main(int argc, char **argv)
 {
-	uint32_t delay = 1024; //Delay timing
+	uint32_t timing = 1024; //Delay timing
 	//flags for recording button presses
 	uint32_t pollA = 0;	
 	uint32_t pollB = 0;
@@ -50,20 +52,20 @@ int main(int argc, char **argv)
 
 	//button A
 	if(pollA){
-		if(delay > 32)
-			delay /= 2;
+		if(timing > 32)
+			timing /= 2;
 		else
-			directon *= -1;
+			direction *= -1;
 			
 	}		
 
 
 	//Button B
 	if(pollB){
-		if(delay < 1024)
-			delay *= 2;
+		if(timing < 1024)
+			timing *= 2;
 		else
-			directon *= -1;
+			direction *= -1;
 			
 	}	
 
