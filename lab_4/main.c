@@ -16,5 +16,42 @@
  * Pressing a button after it has reached its respective bound does not change speed, but reverses
  * the direction of the traveling light. 
  *
- * The code executes on button press, not release. Holding the button doesn't change code behavior.
+ * The code executes on button press, not release. Holding the button doesn't change code behavior
+ * This code uses GPIO pins 0 - 7 for the LEDs and GPIO28 and GPIO29 for the push buttons 
  */
+
+int main(int argc, char **argv)
+{
+	while(1){
+		
+	//polling and debouncing
+	
+
+
+
+
+	//does things based on button press
+
+
+
+	//button A
+
+
+
+
+	//Button B
+
+
+
+	
+
+
+
+
+	//makes sure button is not held down
+	//if button is not pressed down it will set a flag
+	//that will let polling happen again
+	
+
+	}
+}
