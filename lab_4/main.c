@@ -17,11 +17,21 @@
  * the direction of the traveling light. 
  *
  * The code executes on button press, not release. Holding the button doesn't change code behavior
- * This code uses GPIO pins 0 - 7 for the LEDs and GPIO28 and GPIO29 for the push buttons 
+ * This code uses GPIO pins 0 - 7 for the LEDs and GPIO28 and GPIO29 for the push buttons A and B
+ * respectively
  */
+#include <stdint.h>
+#include "gpioRead.h"
+
+#define BOUNCE_DELAY 10
 
 int main(int argc, char **argv)
 {
+	uint32_t delay = 1024; //Delay timing
+	//flags for recording button presses
+	uint32_t pollA = 0;	
+	uint32_t pollB = 0;
+	int32_t direction = 1;
 	while(1){
 		
 	//polling and debouncing
@@ -35,12 +45,23 @@ int main(int argc, char **argv)
 
 
 	//button A
-
-
+	if(pollA){
+		if(delay > 32)
+			delay /= 2;
+		else
+			directon *= -1;
+			
+	}		
 
 
 	//Button B
-
+	if(pollB){
+		if(delay < 1024)
+			delay *= 2;
+		else
+			directon *= -1;
+			
+	}	
 
 
 	
@@ -54,4 +75,5 @@ int main(int argc, char **argv)
 	
 
 	}
+	return 0;
 }
