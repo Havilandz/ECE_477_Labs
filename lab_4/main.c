@@ -30,7 +30,7 @@
 int main(int argc, char **argv)
 {
 	uint32_t timing = 1024; //Delay timing
-	uint32_t i=0; // Loop counter
+	uint32_t i = 0; // Loop counter
 	//flags for recording button presses
 	uint32_t pollA = 0;	
 	uint32_t pollB = 0;
@@ -41,49 +41,49 @@ int main(int argc, char **argv)
 
 	while(1){
 		
-	//polling and debouncing
-	if(pollA){
-		delay(BOUNCE_DELAY);
-		pollA = gpioRead(28);
-	}
-	if(pollB){
-		delay(BOUNCE_DELAY);
-		pollB = gpioRead(29);
-	}
+		//polling and debouncing
+		if(gpioRead(28)){
+			delay(BOUNCE_DELAY);
+			pollA = gpioRead(28);
+		}
+		if(gpioRead(29)){
+			delay(BOUNCE_DELAY);
+			pollB = gpioRead(29);
+		}
+		
+		//does things based on button press
+		if(pollA && pollB) break;
 	
-	//does things based on button press
-	if(pollA && pollB) break;
-
-
-	//button A
-	if(pollA){
-		if(timing > 32)
-			timing /= 2;
-		else
-			direction *= -1;
-			
-	}		
-
-
-	//Button B
-	if(pollB){
-		if(timing < 1024)
-			timing *= 2;
-		else
-			direction *= -1;
-			
-	}	
-
-	//makes sure button is not held down
-	//if button is not pressed down it will set a flag
-	//that will let polling happen again
-	do {
-		ledToggle(i%8);
-		delay(timing);
-		ledToggle(i%8);
-		i += direction;
-	} while(gpioRead(28) || gpioRead(29)); 
-
+	
+		//button A
+		if(pollA){
+			if(timing > 32)
+				timing /= 2;
+			else
+				direction *= -1;
+				
+		}		
+	
+	
+		//Button B
+		if(pollB){
+			if(timing < 1024)
+				timing *= 2;
+			else
+				direction *= -1;
+				
+		}	
+	
+		//makes sure button is not held down
+		//if button is not pressed down it will set a flag
+		//that will let polling happen again
+		do {
+			ledToggle(i%8);
+			delay(timing);
+			ledToggle(i%8);
+			i += direction;
+		} while(gpioRead(28) || gpioRead(29)); 
+	
 	}
 	hexCtrl(0x00);
 	return 0;
