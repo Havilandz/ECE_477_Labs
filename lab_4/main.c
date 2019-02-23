@@ -83,7 +83,8 @@ int main(int argc, char **argv)
 			ledToggle(i%8);
 			i += direction;
 		} while(gpioRead(28) || gpioRead(29)); 
-	
+		pollA = 0;
+		pollB = 0;	
 	}
 	hexCtrl(0x00);
 	return 0;
