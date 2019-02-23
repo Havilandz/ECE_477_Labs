@@ -30,7 +30,7 @@
 int main(int argc, char **argv)
 {
 	uint32_t timing = 1024; //Delay timing
-	uint32_t i; // Loop counter
+	uint32_t i=0; // Loop counter
 	//flags for recording button presses
 	uint32_t pollA = 0;	
 	uint32_t pollB = 0;
@@ -74,23 +74,17 @@ int main(int argc, char **argv)
 			
 	}	
 
-
-	
-
-
-
-
 	//makes sure button is not held down
 	//if button is not pressed down it will set a flag
 	//that will let polling happen again
 	do {
-		for(i = 0; i < 8; i++) {
-			ledToggle(i);
-			delay(timing);
-			ledToggle(i);
-		}
+		ledToggle(i%8);
+		delay(timing);
+		ledToggle(i%8);
+		i += direction;
 	} while(gpioRead(28) || gpioRead(29)); 
 
 	}
+	hexCtrl(0x00);
 	return 0;
 }

@@ -12,10 +12,8 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdint.h>
 #include <wiringPi.h>
-#include <errno.h>
 #include "ledctrl.h"
 
 /* Initializes the 8 GPIO pins for the LEDs */
@@ -49,43 +47,12 @@ int ledToggle(int led)
 	}
 }
 
-int hexCtrl(int n, char *c[])
+int hexCtrl(int input)
 {
 
 	uint32_t mask = 0x01;
 	uint32_t i;
-	uint32_t input = 0;
-	/*used for exception handling. Is set by
-	strtod if input is invalid*/
-	errno = 0;
-
-	/* There must be an argument for the program to work
-	Checked here to prevent other problems like seg faults*/
-	if (n != 2) {
-		fprintf(stderr,"Usage: %s NUMBER\n",c[0]);
-		return -1;
-	}
-
-	/*Converts input to decimal or hex if the number
-	is prepended by 0x. Functionality implicitly supports
-	octal*/
-	input = (uint32_t)strtod(c[1],NULL);
-
-
-	// Error checking
 	
-	//Checks errno to ensure strod converted correctly
-	if (errno == ERANGE){
-		fprintf(stderr,"Enter an integer number\n");	
-		return -1;
-	}
-	// The working values for led masks are only 0-255
-	if ((input < 0) || (input > 255)) {
-	 	fprintf(stderr,"Enter an integer between 0x00 and 0xff\n");
-		return -1;
-	}
-
-
 	// Check each bit of the input and set the corresponding led
 	for (i = 0; i < 8; mask<<=1,i++) {
 		if ((input & mask) == mask) {

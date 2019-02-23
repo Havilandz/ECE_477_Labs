@@ -12,9 +12,8 @@
  * corresponds to a desired LED and toggles its state high or low
  * depending on its current state when entering the function.
  *
- * hexCtrl() can take a hex, decimal, or octal value and recreate the binary
- * representation on LEDs up to 8 bits. This is the code from lab 2
- * recreated to be a standalone function.
+ * hexCtrl() takes a hexadecimal input and recreates the pattern in binary
+ * on the LEDs. The maximum representation is up to 8 bits.
  *
  */
 
@@ -23,6 +22,6 @@
 
 void ledInit(void);
 int ledToggle(int n);
-int hexCtrl(int n, char*c[]);
+int hexCtrl(int input);
 
 #endif
