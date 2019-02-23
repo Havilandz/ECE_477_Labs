@@ -8,6 +8,7 @@
  * 
  */
 #include <wiringPi.h>
+#include "gpioRead.h"
 
 void gpioInit(int pin)
 {
