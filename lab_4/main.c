@@ -35,13 +35,17 @@ int main(int argc, char **argv)
 	while(1){
 		
 	//polling and debouncing
+	if(pollA){
+		delay(BOUNCE_DELAY);
+		pollA = gpioRead(28);
+	}
+	if(pollB){
+		delay(BOUNCE_DELAY);
+		pollB = gpioRead(29);
+	}
 	
-
-
-
-
 	//does things based on button press
-
+	if(pollA && pollB) break;
 
 
 	//button A
