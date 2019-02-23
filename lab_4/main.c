@@ -35,6 +35,10 @@ int main(int argc, char **argv)
 	uint32_t pollA = 0;	
 	uint32_t pollB = 0;
 	int32_t direction = 1;
+	ledInit();
+	gpioInit(28);
+	gpioInit(29);
+
 	while(1){
 		
 	//polling and debouncing
@@ -85,7 +89,7 @@ int main(int argc, char **argv)
 			delay(timing);
 			ledToggle(i);
 		}
-	} while(gpioRead(28) || gpioRead(29)) 
+	} while(gpioRead(28) || gpioRead(29)); 
 
 	}
 	return 0;
