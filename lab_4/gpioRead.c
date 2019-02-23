@@ -13,7 +13,7 @@
 void gpioInit(int pin)
 {
 	wiringPiSetup();
-	pinmode(pin,INPUT);
+	pinMode(pin,INPUT);
 	pullUpDnControl(pin,PUD_UP);
 }
 
