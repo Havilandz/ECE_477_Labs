@@ -3,6 +3,8 @@
  * Authors: Hunter Gross, Zach Haviland, Stephanie Poirier
  * Date: 02.23.2019
  *
+ * This header file contains the function prototypes for ledctrl.c
+ *
  * ledInit() initializes the GPIO pins 0-7 on the Raspberry Pi
  * as outputs as well as calls wiringPiSetup().
  *
