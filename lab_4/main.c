@@ -27,20 +27,29 @@
 
 #define BOUNCE_DELAY 10
 
+void buttonInterrupt(void);
+
+uint32_t pollA;
+uint32_t pollB;
+int timing = 1024;
+int direction = 1;
 int main(int argc, char **argv)
 {
-	uint32_t timing = 1024; //Delay timing
+//	uint32_t timing = 1024; //Delay timing
 	uint32_t i = 0; // Loop counter
 	//flags for recording button presses
-	uint32_t pollA = 0;	
-	uint32_t pollB = 0;
-	int32_t direction = 1;
+//	uint32_t pollA = 0;	
+//	uint32_t pollB = 0;
+//	int32_t direction = 1;
 	ledInit();
 	gpioInit(28);
 	gpioInit(29);
 
+	wiringPiISR(28, INT_EDGE_RISING, buttonInterrupt);
+	wiringPiISR(29, INT_EDGE_RISING, buttonInterrupt);
+
 	while(1){
-		
+/*		
 		//polling and debouncing
 		if(gpioRead(28)){
 			delay(BOUNCE_DELAY);
@@ -73,19 +82,60 @@ int main(int argc, char **argv)
 				direction *= -1;
 				
 		}	
-	
+*/	
 		//makes sure button is not held down
 		//if button is not pressed down it will set a flag
 		//that will let polling happen again
-		do {
+	//	do {
 			ledToggle(i%8);
 			delay(timing);
 			ledToggle(i%8);
 			i += direction;
-		} while(gpioRead(28) || gpioRead(29)); 
-		pollA = 0;
-		pollB = 0;	
+	//	} while(gpioRead(28) || gpioRead(29)); 
+//		pollA = 0;
+//		pollB = 0;	
 	}
 	hexCtrl(0x00);
 	return 0;
 }
+
+void buttonInterrupt() {
+	pollA = 0;
+	pollB = 0;
+
+	// Debouncing
+	 if(gpioRead(28)){
+		delay(BOUNCE_DELAY);
+                pollA = gpioRead(28);
+	 }
+        
+	if(gpioRead(29)){
+		delay(BOUNCE_DELAY);
+                pollB = gpioRead(29);
+         }
+
+	 //does things based on button press
+        if(pollA && pollB) break;
+
+
+         //button A
+	if(pollA){
+		if(timing > 32)
+			timing /= 2;
+                else
+			direction *= -1;
+
+                }
+
+         //Button B
+	if(pollB){
+		if(timing < 1024)
+			timing *= 2;
+                else
+			direction *= -1;
+
+                }
+
+}
+
+
