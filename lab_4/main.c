@@ -29,6 +29,8 @@
 
 void buttonInterrupt(void);
 
+int GLOBAL_EXIT_FLAG = 0;
+
 uint32_t pollA;
 uint32_t pollB;
 int timing = 1024;
@@ -91,6 +93,8 @@ int main(int argc, char **argv)
 			delay(timing);
 			ledToggle(i%8);
 			i += direction;
+
+			if(GLOBAL_EXIT_FLAG) break;		
 	//	} while(gpioRead(28) || gpioRead(29)); 
 //		pollA = 0;
 //		pollB = 0;	
@@ -115,11 +119,11 @@ void buttonInterrupt() {
          }
 
 	 //does things based on button press
-        if(pollA && pollB) break;
-
+        if(pollA && pollB) 
+		GLOBAL_EXIT_FLAG = 1;
 
          //button A
-	if(pollA){
+	if(pollA && !GLOBAL_EXIT_FLAG){
 		if(timing > 32)
 			timing /= 2;
                 else
@@ -128,14 +132,13 @@ void buttonInterrupt() {
                 }
 
          //Button B
-	if(pollB){
+	if(pollB && !GLOBAL_EXIT_FLAG){
 		if(timing < 1024)
 			timing *= 2;
                 else
 			direction *= -1;
 
                 }
-
 }
 
 
