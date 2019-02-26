@@ -47,6 +47,7 @@ int main(int argc, char **argv)
 	gpioInit(28);
 	gpioInit(29);
 
+	// Setup hardware interrupts
 	wiringPiISR(28, INT_EDGE_RISING, buttonInterrupt);
 	wiringPiISR(29, INT_EDGE_RISING, buttonInterrupt);
 
@@ -94,6 +95,7 @@ int main(int argc, char **argv)
 			ledToggle(i%8);
 			i += direction;
 
+			// if both buttons pressed, exit
 			if(GLOBAL_EXIT_FLAG) break;		
 	//	} while(gpioRead(28) || gpioRead(29)); 
 //		pollA = 0;
@@ -119,6 +121,8 @@ void buttonInterrupt() {
          }
 
 	 //does things based on button press
+
+	// Exit condition
         if(pollA && pollB) 
 		GLOBAL_EXIT_FLAG = 1;
 
