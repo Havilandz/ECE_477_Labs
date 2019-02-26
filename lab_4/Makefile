@@ -1,14 +1,10 @@
-OFLAGS = -Wall -g -c
-CFLAGS = -Wall -g -lwiringPi
+TARGET= lab4
+CFLAGS= -Wall -g
+OBJS= main.o ledctrl.o gpioRead.o
+LIBS= -lwiringPi
 
 
-lab4: main.o ledctrl.o gpioRead.o
-	gcc main.o ledctrl.o gpioRead.o  $(CFLAGS) -o lab4
-ledctrl.o: ledctrl.h ledctrl.c
-	gcc $(OFLAGS) ledctrl.c
-gpioRead.o: gpioRead.h gpioRead.c
-	gcc $(OFLAGS) gpioRead.c
-main.o: main.c
-	gcc $(OFLAGS)  main.c 
+${TARGET}: ${OBJS}
+	${CC} ${OBJS} ${LIBS}
 clean:
-	rm *.o lab4
+	rm -f ${OBJS} ${TARGET}
