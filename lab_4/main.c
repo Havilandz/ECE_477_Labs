@@ -53,6 +53,7 @@ int main(int argc, char **argv)
 	// Setup hardware interrupts
 	wiringPiISR(28, INT_EDGE_RISING, buttonInterrupt);
 	wiringPiISR(29, INT_EDGE_RISING, buttonInterrupt);
+//	wiringPiISR(30, INT_EDGE_RISING, buttonInterrupt);
 
 	while(1){
 /*		
@@ -127,6 +128,7 @@ int main(int argc, char **argv)
 void buttonInterrupt() {
 	pollA = 0;
 	pollB = 0;
+	pollC = 0;
 
 	// Debouncing
 	 if(gpioRead(28)){
@@ -138,6 +140,11 @@ void buttonInterrupt() {
 		delay(BOUNCE_DELAY);
                 pollB = gpioRead(29);
          }
+		 
+//	if(gpioRead(30)){
+//		delay(BOUNCE_DELAY);
+ //               pollA = gpioRead(30);
+//	 }	 
 
 	 //does things based on button press
 
