@@ -29,21 +29,58 @@ void ledInit()
 
 /* Toggles the passed LED on or off depending on its previous state.
 Returns -1 on error, 0 on set low, and 1 on set high. */
-int ledToggle(int led)
+int ledToggle(int led, int amt, int sign)
 {
+	int i;
+	int check;
 	if((led < 0) || (led > 7)) {
 		printf("Error: indexing a non-existant LED\n");
 		return -1;
 	}
 	
-	if(digitalRead(led)) {
-		digitalWrite(led, LOW);
-		return 0;
-	}
+	/* added amt variable for the amount of LEDS to be toggled
+	 * based on how many times button c was pressed, when the maximum number
+	 * of LEDS are toggled reset back to one LED. code currently does not wrap LEDs
+	 * also added sign argument to determine which LEDS should be the trailing ones
+	 */
+	if(sign == 1){		
+	 
+		for(i=amt-1;i>=0;i--){
+		
+			if((led-i > 7) || (led-i<0)){ //checks to make sure only trying to toggle leds
+				continue;
+			}
+		
+		
+			if(digitalRead(led-i)) {
+				digitalWrite(led-i, LOW);
+				return 0;
+			}
 
-	else {
-		digitalWrite(led,HIGH);
-		return 1;
+			else {
+				digitalWrite(led-i,HIGH);
+				return 1;
+			}
+		}
+	} else if(sign == -1) {
+		
+		for(i=amt-1;i>=0;i--){
+		
+			if((led+i > 7) || (led+i<0)){
+				continue;
+			}
+		
+		
+			if(digitalRead(led+i)) {
+				digitalWrite(led+i, LOW);
+				return 0;
+			}
+
+			else {
+				digitalWrite(led+i,HIGH);
+				return 1;
+			}
+		}
 	}
 }
 

@@ -37,6 +37,8 @@ int timing = 1024;
 int direction = 1;
 int main(int argc, char **argv)
 {
+	int amount = 1;//amount of LEDS to be toggled based on button C presses
+	
 //	uint32_t timing = 1024; //Delay timing
 	uint32_t i = 0; // Loop counter
 	//flags for recording button presses
@@ -46,6 +48,7 @@ int main(int argc, char **argv)
 	ledInit();
 	gpioInit(28);
 	gpioInit(29);
+//	gpioInit(30);  //initialize Button C
 
 	// Setup hardware interrupts
 	wiringPiISR(28, INT_EDGE_RISING, buttonInterrupt);
@@ -61,6 +64,11 @@ int main(int argc, char **argv)
 		if(gpioRead(29)){
 			delay(BOUNCE_DELAY);
 			pollB = gpioRead(29);
+		}
+		
+		if(gpioRead(30)){
+			delay(BOUNCE_DELAY);
+			pollC = gpioRead(30);
 		}
 		
 		//does things based on button press
@@ -85,14 +93,25 @@ int main(int argc, char **argv)
 				direction *= -1;
 				
 		}	
+		
+		//button C
+		if(pollC){
+			if(amount==8){
+				amount = 1;
+			} else {
+				amount++;
+			}
+			//when the button is pressed, an additional LED will light up and move at speed 'timing'. 
+			//after all 8 LEDs are lit, the next button push will reset the number of LEDs lit back to one
+		}
 */	
 		//makes sure button is not held down
 		//if button is not pressed down it will set a flag
 		//that will let polling happen again
 	//	do {
-			ledToggle(i%8);
+			ledToggle(i%8, amount, direction);
 			delay(timing);
-			ledToggle(i%8);
+			ledToggle(i%8, amount, direction);
 			i += direction;
 
 			// if both buttons pressed, exit

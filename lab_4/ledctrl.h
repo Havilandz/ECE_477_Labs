@@ -21,7 +21,7 @@
 #define LEDCTRL_H
 
 void ledInit(void);
-int ledToggle(int n);
+int ledToggle(int n, int amt, int sign);
 int hexCtrl(int input);
 
 #endif
