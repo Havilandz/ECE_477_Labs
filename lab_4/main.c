@@ -29,7 +29,7 @@
 
 void buttonInterrupt(void);
 
-int GLOBAL_EXIT_FLAG = 0;
+volatile int GLOBAL_EXIT_FLAG = 0;
 //flags for recording button presses
 uint32_t pollA = 0;
 uint32_t pollB = 0;
