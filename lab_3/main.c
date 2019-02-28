@@ -110,7 +110,7 @@ int main(int argc, char *argv[]){
 		/* Error checking */
 		if(fp == NULL){
 			printf("error opening file, exiting\n");
-			return 1;
+			return;
 		}
 
 		//First value encountered is minute load average
@@ -160,7 +160,7 @@ int main(int argc, char *argv[]){
 		//closes file and checks to make sure it succeded
 		if(fclose(fp)){
 			printf("failed to close /proc/loadavg. Aborting program\n");
-			return 1;
+			return;//removed return value to try not to make zombies. 
 		}
 		delay(10000);
 	}
