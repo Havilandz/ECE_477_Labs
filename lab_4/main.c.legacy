@@ -30,73 +30,120 @@
 void buttonInterrupt(void);
 
 int GLOBAL_EXIT_FLAG = 0;
-//flags for recording button presses
-uint32_t pollA = 0;
-uint32_t pollB = 0;
-uint32_t pollC = 0;
 
-
+uint32_t pollA;
+uint32_t pollB;
 int timing = 1024;
 int direction = 1;
 int main(int argc, char **argv)
 {
 	int amount = 1;//amount of LEDS to be toggled based on button C presses
 	
-
+//	uint32_t timing = 1024; //Delay timing
 	uint32_t i = 0; // Loop counter
-
-
-
-
+	//flags for recording button presses
+//	uint32_t pollA = 0;	
+//	uint32_t pollB = 0;
+//	int32_t direction = 1;
 	ledInit();
-	gpioInit(27);
 	gpioInit(28);
-
+	gpioInit(29);
+//	gpioInit(30);  //initialize Button C
 
 	// Setup hardware interrupts
-	wiringPiISR(27, INT_EDGE_RISING, buttonInterrupt);
 	wiringPiISR(28, INT_EDGE_RISING, buttonInterrupt);
-//	wiringPiISR(29, INT_EDGE_RISING, buttonInterrupt);
+	wiringPiISR(29, INT_EDGE_RISING, buttonInterrupt);
+//	wiringPiISR(30, INT_EDGE_RISING, buttonInterrupt);
 
 	while(1){
+/*		
+		//polling and debouncing
+		if(gpioRead(28)){
+			delay(BOUNCE_DELAY);
+			pollA = gpioRead(28);
+		}
+		if(gpioRead(29)){
+			delay(BOUNCE_DELAY);
+			pollB = gpioRead(29);
+		}
 		
+		if(gpioRead(30)){
+			delay(BOUNCE_DELAY);
+			pollC = gpioRead(30);
+		}
+		
+		//does things based on button press
+		if(pollA && pollB) break;
 	
+	
+		//button A
+		if(pollA){
+			if(timing > 32)
+				timing /= 2;
+			else
+				direction *= -1;
+				
+		}		
+	
+	
+		//Button B
+		if(pollB){
+			if(timing < 1024)
+				timing *= 2;
+			else
+				direction *= -1;
+				
+		}	
+		
+		//button C
+		if(pollC){
+			if(amount==8){
+				amount = 1;
+			} else {
+				amount++;
+			}
+			//when the button is pressed, an additional LED will light up and move at speed 'timing'. 
+			//after all 8 LEDs are lit, the next button push will reset the number of LEDs lit back to one
+		}
+*/	
+		//makes sure button is not held down
+		//if button is not pressed down it will set a flag
+		//that will let polling happen again
+	//	do {
+			ledToggle(i%8, amount, direction);
+			delay(timing);
+			ledToggle(i%8, amount, direction);
+			i += direction;
 
-
-		ledToggle(i%8, amount, direction);
-		delay(timing);
-		ledToggle(i%8, amount, direction);
-		i += direction;
-
-
-		if(GLOBAL_EXIT_FLAG) break;		
-
-
-
+			// if both buttons pressed, exit
+			if(GLOBAL_EXIT_FLAG) break;		
+	//	} while(gpioRead(28) || gpioRead(29)); 
+//		pollA = 0;
+//		pollB = 0;	
 	}
 	hexCtrl(0x00);
 	return 0;
 }
 
-void buttonInterrupt(void) {
+void buttonInterrupt() {
 	pollA = 0;
 	pollB = 0;
 	pollC = 0;
 
 	// Debouncing
-	 if(gpioRead(27)){
+	 if(gpioRead(28)){
 		delay(BOUNCE_DELAY);
-                pollA = gpioRead(27);
+                pollA = gpioRead(28);
 	 }
         
-	if(gpioRead(28)){
+	if(gpioRead(29)){
 		delay(BOUNCE_DELAY);
-                pollB = gpioRead(28);
+                pollB = gpioRead(29);
          }
 		 
-//	if(gpioRead(29)){
+//	if(gpioRead(30)){
 //		delay(BOUNCE_DELAY);
- //               pollA = gpioRead(29);
+ //               pollA = gpioRead(30);
 //	 }	 
 
 	 //does things based on button press

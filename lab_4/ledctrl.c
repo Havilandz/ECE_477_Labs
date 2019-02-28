@@ -32,7 +32,7 @@ Returns -1 on error, 0 on set low, and 1 on set high. */
 int ledToggle(int led, int amt, int sign)
 {
 	int i;
-	int check;
+//	int check;
 	if((led < 0) || (led > 7)) {
 		printf("Error: indexing a non-existant LED\n");
 		return -1;
