@@ -43,26 +43,8 @@ int ledToggle(int led, int amt, int sign)
 	 * of LEDS are toggled reset back to one LED. code currently does not wrap LEDs
 	 * also added sign argument to determine which LEDS should be the trailing ones
 	 */
-	if(sign == 1){		
-	 
-		for(i=amt-1;i>=0;i--){
-		
-			if((led-i > 7) || (led-i<0)){ //checks to make sure only trying to toggle leds
-				continue;
-			}
-		
-		
-			if(digitalRead(led-i)) {
-				digitalWrite(led-i, LOW);
-				return 0;
-			}
 
-			else {
-				digitalWrite(led-i,HIGH);
-				return 1;
-			}
-		}
-	} else if(sign == -1) {
+	 if(sign == -1) {
 		
 		for(i=amt-1;i>=0;i--){
 		
@@ -78,6 +60,25 @@ int ledToggle(int led, int amt, int sign)
 
 			else {
 				digitalWrite(led+i,HIGH);
+				return 1;
+			}
+		}
+	} else{		
+	 
+		for(i=amt-1;i>=0;i--){
+		
+			if((led-i > 7) || (led-i<0)){ //checks to make sure only trying to toggle leds
+				continue;
+			}
+		
+		
+			if(digitalRead(led-i)) {
+				digitalWrite(led-i, LOW);
+				return 0;
+			}
+
+			else {
+				digitalWrite(led-i,HIGH);
 				return 1;
 			}
 		}

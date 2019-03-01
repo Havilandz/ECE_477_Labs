@@ -34,13 +34,13 @@ int GLOBAL_EXIT_FLAG = 0;
 uint32_t pollA = 0;
 uint32_t pollB = 0;
 uint32_t pollC = 0;
-
+int amount = 1;//amount of LEDS to be toggled each step. 
 
 int timing = 1024;
 int direction = 1;
 int main(int argc, char **argv)
 {
-	int amount = 1;//amount of LEDS to be toggled based on button C presses
+
 	
 
 	uint32_t i = 0; // Loop counter
@@ -54,9 +54,9 @@ int main(int argc, char **argv)
 
 
 	// Setup hardware interrupts
-	wiringPiISR(27, INT_EDGE_RISING, buttonInterrupt);
-	wiringPiISR(28, INT_EDGE_RISING, buttonInterrupt);
-//	wiringPiISR(29, INT_EDGE_RISING, buttonInterrupt);
+	wiringPiISR(27, INT_EDGE_FALLING, buttonInterrupt);
+	wiringPiISR(28, INT_EDGE_FALLING, buttonInterrupt);
+	wiringPiISR(29, INT_EDGE_RISING, buttonInterrupt);
 
 	while(1){
 		
@@ -94,10 +94,10 @@ void buttonInterrupt(void) {
                 pollB = gpioRead(28);
          }
 		 
-//	if(gpioRead(29)){
-//		delay(BOUNCE_DELAY);
- //               pollA = gpioRead(29);
-//	 }	 
+	if(gpioRead(29)){
+		delay(BOUNCE_DELAY);
+               pollC = gpioRead(29);
+	 }	 
 
 	 //does things based on button press
 
@@ -122,6 +122,12 @@ void buttonInterrupt(void) {
 			direction *= -1;
 
                 }
+	//Button C
+	if(pollC && !GLOBAL_EXIT_FLAG){
+		if(++amount > 7)
+			amount = 1;
+	}
+
 }
 
 
