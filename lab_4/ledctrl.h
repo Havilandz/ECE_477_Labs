@@ -22,7 +22,7 @@
 
 void ledInit(void);
 int ledToggle(int led);
-int ledFollow(int n, int amt, int sign);
+int ledFollow(int led, int amt, int sign);
 int hexCtrl(int input);
 
 #endif

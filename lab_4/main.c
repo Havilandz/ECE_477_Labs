@@ -51,12 +51,12 @@ int main(int argc, char **argv)
 	ledInit();
 	gpioInit(27);
 	gpioInit(28);
-
+	gpioInit(29);
 
 	// Setup hardware interrupts
 	wiringPiISR(27, INT_EDGE_FALLING, buttonInterrupt);
 	wiringPiISR(28, INT_EDGE_FALLING, buttonInterrupt);
-	wiringPiISR(29, INT_EDGE_RISING, buttonInterrupt);
+	wiringPiISR(29, INT_EDGE_FALLING, buttonInterrupt);
 
 	while(1){
 		
@@ -68,7 +68,12 @@ int main(int argc, char **argv)
 		ledFollow(i%8, amount, direction);
 
 		i += direction;
-
+		if(pollC)
+		{
+			if(++amount > 7)
+				amount =0;
+			pollC = 0;
+		}
 
 		if(GLOBAL_EXIT_FLAG) break;		
 
@@ -123,11 +128,9 @@ void buttonInterrupt(void) {
 			direction *= -1;
 
                 }
-	//Button C
-	if(pollC && !GLOBAL_EXIT_FLAG){
-		if(++amount > 7)
-			amount =0;
-	}
+
+
+
 
 }
 
