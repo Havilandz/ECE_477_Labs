@@ -53,9 +53,8 @@ int ledToggle(int led)
  * also added sign argument to determine which LEDS should be the trailing ones	 */
 int ledFollow(int led, int amt, int sign)
 {
-	uint32_t i;
-	uint32_t j;
-	//Error Checking
+	int i;
+
 	if((led < 0) || (led > 7)) {
 		printf("Error: indexing a non-existant LED\n");
 		return -1;
@@ -63,10 +62,41 @@ int ledFollow(int led, int amt, int sign)
 	if((sign != -1) || (sign != 1)){
 		printf("Error with ledFollow. Direction not specified\n");	
 
-	for(i = 0,j = 0;i < amt;i++,j-=sign){
-		ledToggle((led+j)%8);
+	 if(sign == -1) {
+		
+		for(i=amt-1;i>=0;i--){
+		
+			if((led+i > 7) || (led+i<0)){
+				continue;
+			}
+		
+		
+			if(digitalRead(led+i)) {
+				digitalWrite(led+i, LOW);
+			}
 
-	} 
+			else {
+				digitalWrite(led+i,HIGH);
+			}
+		}
+	} else{		
+	 
+		for(i=amt-1;i>=0;i--){
+		
+			if((led-i > 7) || (led-i<0)){ //checks to make sure only trying to toggle leds
+				continue;
+			}
+		
+		
+			if(digitalRead(led-i)) {
+				digitalWrite(led-i, LOW);
+			}
+
+			else {
+				digitalWrite(led-i,HIGH);
+			}
+		}
+	}
 	return 0;
 }
 
