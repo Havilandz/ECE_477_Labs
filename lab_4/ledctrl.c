@@ -29,7 +29,27 @@ void ledInit()
 
 /* Toggles the passed LED on or off depending on its previous state.
 Returns -1 on error, 0 on set low, and 1 on set high. */
-int ledToggle(int led, int amt, int sign)
+int ledToggle(int led)
+{
+	if((led < 0) || (led > 7)) {
+		printf("Error: indexing a non-existant LED\n");
+		return -1;
+	}
+	
+	if(digitalRead(led)) {
+		digitalWrite(led, LOW);
+		return 0;
+	}
+
+	else {
+		digitalWrite(led,HIGH);
+		return 1;
+	}
+}
+
+/* Toggles the passed LED on or off depending on its previous state.
+Returns -1 on error, 0 on set low, and 1 on set high. */
+int ledFollow(int led, int amt, int sign)
 {
 	int i;
 //	int check;
@@ -55,12 +75,10 @@ int ledToggle(int led, int amt, int sign)
 		
 			if(digitalRead(led+i)) {
 				digitalWrite(led+i, LOW);
-				return 0;
 			}
 
 			else {
 				digitalWrite(led+i,HIGH);
-				return 1;
 			}
 		}
 	} else{		
@@ -74,15 +92,14 @@ int ledToggle(int led, int amt, int sign)
 		
 			if(digitalRead(led-i)) {
 				digitalWrite(led-i, LOW);
-				return 0;
 			}
 
 			else {
 				digitalWrite(led-i,HIGH);
-				return 1;
 			}
 		}
 	}
+	return 0;
 }
 
 int hexCtrl(int input)

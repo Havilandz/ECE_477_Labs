@@ -63,9 +63,9 @@ int main(int argc, char **argv)
 	
 
 
-		ledToggle(i%8, amount, direction);
+		ledFollow(i%8, amount, direction);
 		delay(timing);
-		ledToggle(i%8, amount, direction);
+		ledFollow(i%8, amount, direction);
 		i += direction;
 
 
