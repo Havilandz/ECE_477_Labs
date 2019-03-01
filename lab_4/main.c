@@ -34,7 +34,7 @@ volatile int GLOBAL_EXIT_FLAG = 0;
 uint32_t pollA = 0;
 uint32_t pollB = 0;
 uint32_t pollC = 0;
-int amount = 1;//amount of LEDS to be toggled each step. 
+int amount = 0;//amount of LEDS to be toggled each step. 
 
 int timing = 1024;
 int direction = 1;
@@ -66,6 +66,7 @@ int main(int argc, char **argv)
 		ledFollow(i%8, amount, direction);
 		delay(timing);
 		ledFollow(i%8, amount, direction);
+
 		i += direction;
 
 
@@ -125,7 +126,7 @@ void buttonInterrupt(void) {
 	//Button C
 	if(pollC && !GLOBAL_EXIT_FLAG){
 		if(++amount > 7)
-			amount = 1;
+			amount =0;
 	}
 
 }

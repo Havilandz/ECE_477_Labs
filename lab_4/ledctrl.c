@@ -60,15 +60,15 @@ int ledFollow(int led, int amt, int sign)
 		printf("Error: indexing a non-existant LED\n");
 		return -1;
 	}
-	if((sign != -1) || (sign != 1)){
+	if((sign != -1) && (sign != 1)){
 		printf("Error with ledFollow. Direction not specified\n");	
 		return -1;
 	}
-	if(amt < 1 || amt >= 8){
-		printf("Error with ledFollow. Amt must be positive and less than 8");
+	if(amt < 0 || amt >= 8){
+		printf("Error with ledFollow. Amt must be between 0 and 8 inclusive\n");
 		return -1;
 	}
-	for(i = 0,j = 0;i < amt;i++,j-=sign){
+	for(i = 0,j = 0;i <= amt;i++,j-=sign){
 		ledToggle((led+j)%8);
 
 	} 
