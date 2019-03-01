@@ -12,6 +12,10 @@
  * corresponds to a desired LED and toggles its state high or low
  * depending on its current state when entering the function.
  *
+ * ledFollow() takes an LED and a number of follower LEDs and a 
+ * direction. It calls ledToggle for the corresponding LEDs
+ * to allow Lab 4 to function with multiple "moving" LEDs.
+ *
  * hexCtrl() takes a hexadecimal input and recreates the pattern in binary
  * on the LEDs. The maximum representation is up to 8 bits.
  *
