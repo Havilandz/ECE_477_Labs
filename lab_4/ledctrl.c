@@ -74,7 +74,7 @@ int ledFollow(int led, int amt, int sign)
 	} 
 	return 0;
 }
-
+/* Takes a hexadecimal input and recreate the bit pattern on the LEDs */
 int hexCtrl(int input)
 {
 

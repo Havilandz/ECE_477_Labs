@@ -17,8 +17,13 @@
  * the direction of the traveling light. 
  *
  * The code executes on button press, not release. Holding the button doesn't change code behavior
- * This code uses GPIO pins 0 - 7 for the LEDs and GPIO28 and GPIO29 for the push buttons A and B
+ * This code uses GPIO pins 0 - 7 for the LEDs and GPIO27 and GPIO28 for the push buttons A and B
  * respectively
+ *
+ * Push button C increases the amount of LEDs that "move". for each press of button C, the number
+ * of LEDs lit at any given time increases by 1 until all of the LEDs are lit. Pressing button C again
+ * after it has reached it's bound resets the number of lit LEDs to 1.
+ *
  */
 #include <stdint.h>
 #include "gpioRead.h"
@@ -29,25 +34,28 @@
 
 void buttonInterrupt(void);
 
+// flag to trigger an exit on button A+B press
 volatile int GLOBAL_EXIT_FLAG = 0;
-//flags for recording button presses
+
+// flags for recording button presses
 uint32_t pollA = 0;
 uint32_t pollB = 0;
 uint32_t pollC = 0;
-int amount = 0;//amount of LEDS to be toggled each step. 
 
+// amount of LEDs to be toggled each step
+int amount = 0; 
+
+// default delay time in ms
 int timing = 1024;
+
+// signed direction bit
 int direction = 1;
+
 int main(int argc, char **argv)
-{
-
-	
-
+{	
 	uint32_t i = 0; // Loop counter
 
-
-
-
+	// Initialization
 	ledInit();
 	gpioInit(27);
 	gpioInit(28);
@@ -59,15 +67,15 @@ int main(int argc, char **argv)
 	wiringPiISR(29, INT_EDGE_FALLING, buttonInterrupt);
 
 	while(1){
-		
-	
 
-
+		// Main routine for toggling LEDs
 		ledFollow(i%8, amount, direction);
 		delay(timing);
 		ledFollow(i%8, amount, direction);
-
 		i += direction;
+		
+		/* Interrupt routine for button c is outside
+		ISR due to timing issues */
 		if(pollC)
 		{
 			if(++amount > 7)
@@ -75,15 +83,16 @@ int main(int argc, char **argv)
 			pollC = 0;
 		}
 
+		// Exit Condition
 		if(GLOBAL_EXIT_FLAG) break;		
 
-
-
 	}
-	hexCtrl(0x00);
+	
+	hexCtrl(0x00); // Clears all LEDs before shutdown
 	return 0;
 }
 
+// Interrupt Service Routine
 void buttonInterrupt(void) {
 	pollA = 0;
 	pollB = 0;
@@ -105,33 +114,23 @@ void buttonInterrupt(void) {
                pollC = gpioRead(29);
 	 }	 
 
-	 //does things based on button press
-
 	// Exit condition
         if(pollA && pollB) 
 		GLOBAL_EXIT_FLAG = 1;
 
          //button A
 	if(pollA && !GLOBAL_EXIT_FLAG){
-		if(timing > 32)
-			timing /= 2;
-                else
-			direction *= -1;
-
-                }
+		if(timing > 32) timing /= 2;
+                
+		else direction *= -1;
+	}
 
          //Button B
 	if(pollB && !GLOBAL_EXIT_FLAG){
-		if(timing < 1024)
-			timing *= 2;
-                else
-			direction *= -1;
-
-                }
-
-
-
-
+		if(timing < 1024) timing *= 2;
+                
+		else direction *= -1;
+	}
 }
 
 
