@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <avr/sleep.h>
-
+#include "Lab5ISR.h"
 void init_pwm(void);
 void update_clock_speed(void);
 
@@ -28,7 +28,13 @@ int main()
 {
   update_clock_speed();  //adjust OSCCAL
   init_pwm();            //set up hardware PWM
-  while(1);              //literally nothing left to do
+
+  GICR = 1<<INT0; // Enable INT0 interrupt (Physical pin 16)
+  MCUCR = 1<<ISC01 | 1<<ISC00; // Set interrupt trigger to rising edge
+
+  sei(); // Enable global interrupt
+
+  while(1); //literally nothing left to do
 }
 
 //read the first two bytes of eeprom, if they have been programmed
