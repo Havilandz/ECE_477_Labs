@@ -8,13 +8,13 @@ program: a.hex
 	sudo avrdude ${AVR_CONF} -c pi_1 -p ${CHIP} -U flash:w:a.hex:i
 
 
-hex: a.out
+a.hex: a.out
 	avr-objcopy -j .text -j .data -O ihex a.out a.hex
 
-compile: ${TARGET}
+a.out: ${TARGET}
 	${CC} ${CFLAGS} ${TARGET}
 
 fuses:
-	sudo avrdude ${AVR_CONF} -c pi_1 -p ${CHIP} -U lfuse:w:0x52:m -U hfuse:w:0x99:m -U efuse:w:0xff:m
+	sudo avrdude ${AVR_CONF} -c pi_1 -p ${CHIP} -U lfuse:w:0xD2:m -U hfuse:w:0x99:m -U efuse:w:0xff:m
 clean:
 	rm -f *.hex *.out

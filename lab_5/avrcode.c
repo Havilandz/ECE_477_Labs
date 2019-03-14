@@ -64,7 +64,7 @@ void init_pwm(void)
   // ***   Timer 1                                                *
   // **************************************************************
   
-  DDRB |= (1<<PB1);  //set OC1A as an output
+  DDRD |= (1<<PD5);  //set OC1A as an output
   OCR1A=19999;    //set initial compare at 50%
   ICR1=39999U; // 8 MHz /40000/2 = PWM frequency = 100 Hz
   TCCR1A = (1<<COM1A1); //zeros in COM1B1,COM1B0,WGM11,WGM10  
