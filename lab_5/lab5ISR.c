@@ -20,7 +20,7 @@
 
 clock_t start, end, diff = 0;
 
-int frequency = 0;
+extern double frequency;
 
 void intInit()
 {
@@ -41,16 +41,16 @@ void endTimerISR()
 	// find the stop time and calculate the period
 	end = clock();
 	diff = end - start;
-	frequency = getFrequency(diff);
+	frequency = 1/diff
 }
 
-int getFrequency(int d)
-{
-	int freq;
-	while(1){ // Wait until next frequency measurement
-		if (d){ // Only calculate frequency if there is a period
-			freq = 1 / d;
-			diff = 0; // Clear diff to prep for next interrupt
-			return freq;
-		}
-	}
+//double getFrequency(clock_t d)
+//{
+//	double freq;
+//	while(1){ // Wait until next frequency measurement
+//		if (d){ // Only calculate frequency if there is a period
+//			freq = 1 / d;
+//			diff = 0; // Clear diff to prep for next interrupt
+//			return freq;
+//		}
+//	}

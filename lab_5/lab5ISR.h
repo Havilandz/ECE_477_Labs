@@ -16,7 +16,7 @@
 
 #ifndef LAB5ISR_H
 #define LAB5ISR_H
-
+double frequency = 0;
 
 /* Function preforms the wiringPi initialization
 and sets up two interrupts on the rising and falling
@@ -35,7 +35,7 @@ difference (diff) */
 void endTimerISR(void);
 
 /* Helper function to calulate frequency from
-a given diff (period). */
-int getFrequency(int d);
+a given diff (period). Depreciated in new code */
+//int getFrequency(int d);
 
 #endif
