@@ -1,6 +1,6 @@
 TARGET= clock_adjust
 CFLAGS= -Wall -g
-OBJS= main.o lab5ISR.o 
+OBJS= main.o 
 LIBS= -lwiringPi
 
 all: ${TARGET}

@@ -5,10 +5,7 @@
  * This file sets up the interrupts for measuring the period 
  * of the clock signal
  *
- * The global variable 'frequency' stores the calculated 
- * frequency of the current period
- *
- * The user should check if frequency is 0 before reading
+ * The user should check if frequency is 0 after reading
  * the value to ensure a measurement has been made.
  *
  */
@@ -18,21 +15,26 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <wiringPi.h>
+#include <stdio.h>
 clock_t start, end, diff = 0;
-//stores frequency
-double frequency;
 //keeps track of how many times these routines have gone off
+//Meaningfully means how many half periods the routine has measured. 
 uint32_t samples = 0;
-//total frequency across all samples
+//total time spent high in clock cycles.
 double total = 0;
+/* End endTimerISR needs to be enabled after the
+   startTimerISR to prevent strange timing issues from happening
+   end_init tracks when endTimerISR has been enabled*/
+uint32_t end_init = 0;
+
 
 void intInit()
 {
 	wiringPiSetup();
 	samples = 0;
 	total = 0;
-	wiringPiISR(0, INT_RISING_EDGE, startTimerISR());
-	wiringPiISR(0, INT_FALLING_EDGE, endTimerISR());
+	wiringPiISR(0, INT_EDGE_RISING, startTimerISR);
+
 	return;	
 }
 
@@ -41,6 +43,10 @@ void startTimerISR()
 	// Keep track of the start time
 	start = clock();
 	samples++;
+	if(end_init == 0){
+		wiringPiISR(0, INT_EDGE_FALLING, endTimerISR);	
+		end_init = 1;
+	}
 	return;
 }
 
@@ -49,14 +55,14 @@ void endTimerISR()
 	// find the stop time and calculate the period
 	end = clock();
 	diff = end - start;
-	frequency = 1/diff;
-	total += frequency;	
+	total += diff;	
+	printf("%i\n",samples);
 	return;
 }
 
 double getFreq(void)
 {
-	return total/samples;
+	return CLOCKS_PER_SEC * samples / (2 * total);
 }
 
 //gpioMute should stop the intterupts from registering
