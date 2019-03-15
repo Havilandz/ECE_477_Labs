@@ -1,3 +1,4 @@
+#Cool Stuff Makefile
 TARGET= clock_adjust
 CFLAGS= -Wall -g
 OBJS= main.o 

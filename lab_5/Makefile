@@ -1,3 +1,4 @@
+#AVR programmer makefile
 TARGET=avrcode.c
 AVR_CONF=-C ../avrdude_gpio.conf
 ACC=avr-gcc
