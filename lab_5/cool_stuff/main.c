@@ -60,8 +60,9 @@ int main()
 		}	
 		EEPROM_offset = (EEPROM_range[0] + EEPROM_range[1])/2;	
 		printf("OSCAL OFFSET: %i\n",EEPROM_offset);
+		program_board(EEPROM_offset);
 	}
-	program_board(15);
+
 	return 0;
 	
 
