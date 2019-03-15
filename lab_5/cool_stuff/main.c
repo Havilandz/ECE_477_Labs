@@ -42,7 +42,7 @@ int main()
 	//takes samples at ~400Hz 
 	for(i = 0;i<DATA_LENGTH;i++){
 		data_pointer[i] = digitalRead(0);	
-		usleep(2470);
+		usleep(2432);
 	}
 	//calculates frequency
 	freq = calc_freq(data_pointer, DATA_LENGTH, 400);
