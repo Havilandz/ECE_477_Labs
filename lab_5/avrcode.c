@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <avr/sleep.h>
-#include "Lab5ISR.h"
 void init_pwm(void);
 void update_clock_speed(void);
 

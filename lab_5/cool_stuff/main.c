@@ -26,6 +26,7 @@
 
 void program_board(int offset);
 float calc_freq(uint32_t *data,unsigned int length, int Fs);
+char decToHexa(int n);
 int main()
 {	
 	
@@ -38,7 +39,7 @@ int main()
 	float freq = 0;
 	//Used for building adjustmetns to EEPROM
 	int32_t EEPROM_offset = 0;
-	int32_t EEPROM_range[2] = {-20,20};
+	int32_t EEPROM_range[2] = {-15,15};
 	//sets reading pin to input
 	pinMode(0,INPUT);
 	while(freq < 90 || freq > 110){
@@ -60,6 +61,7 @@ int main()
 		EEPROM_offset = (EEPROM_range[0] + EEPROM_range[1])/2;	
 		printf("%i\n",EEPROM_offset);
 	}
+	program_board(15);
 	return 0;
 	
 
@@ -100,8 +102,43 @@ float calc_freq(uint32_t *data,unsigned int length, int Fs)
 	return ((float)periods)/totalT*Fs;
 }
 //programs the board EEPROM memory
-void program_board(int offset){
-
+void program_board(int offset)
+{
+	int sign = offset/offset;
+	int magnitude = decToHexa(offset*sign);
+	char programming[120];
+	sprintf(programming, "sudo avrdude -C ../../avrdude_gpio.conf -c pi_1 -p atmega324pa -D -U eeprom:w:0x%i%c:m",sign,magnitude); 
+	system(programming);
+	return;
 
 }
 
+// function to convert decimal to hexadecimal. Only works for values up to F 
+char decToHexa(int n) 
+{	
+	// char array to store hexadecimal number 
+	char hexaDeciNum[100]; 
+	  
+	// counter for hexadecimal number array 
+	int i = 0; 
+	while(n!=0) 
+	{	
+		// temporary variable to store remainder 
+		int temp  = 0; 
+	   
+		// storing remainder in temp variable. 
+		temp = n % 16; 
+	   
+		// check if temp < 10 
+		if(temp < 10) { 
+			hexaDeciNum[i] = temp + 48; 
+			i++; 
+		} else{ 
+			hexaDeciNum[i] = temp + 55; 
+			i++; 
+		} 
+	   
+		n = n/16; 
+	}
+	return hexaDeciNum[0];
+} 
