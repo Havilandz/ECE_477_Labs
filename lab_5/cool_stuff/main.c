@@ -50,7 +50,7 @@ int main()
 		}
 		//calculates frequency
 		freq = calc_freq(data_pointer, DATA_LENGTH, 400);
-		printf("%.8f\n",freq);
+		printf("Frequency: %.8f\n",freq);
 		//determines offset to try when reprogramming
 		if(freq > 110){
 			EEPROM_range[1] = EEPROM_offset -1;
@@ -59,7 +59,7 @@ int main()
 			EEPROM_range[0] = EEPROM_offset +1;		
 		}	
 		EEPROM_offset = (EEPROM_range[0] + EEPROM_range[1])/2;	
-		printf("%i\n",EEPROM_offset);
+		printf("OSCAL OFFSET: %i\n",EEPROM_offset);
 	}
 	program_board(15);
 	return 0;
