@@ -5,6 +5,7 @@ Zach Haviland
 Hunter Gross
 Steph Poirier
 
+Frequency is read on physical pin 11
 This program reads a waveform from the avr clock output on physical pin 11 of the RPI
 and reprograms the EEPROM of the AVR to get the clock to be closer to 100hz. It iterates
 this process until the signal is within 99 - 101 hz
@@ -17,36 +18,40 @@ to work with other stuff.
 #include <stdlib.h>
 #include <time.h>
 #include <wiringPi.h>
+//ISR puts clock timeStamps in here.
+//every two timeStamps constitudes one period
+//of the input waveform
+clock_t timeStamps[20] = {0};
+//index for accessing the timeStamps array
+uint32_t i= 0;
+
+void FREQ_ISR(void);
+
+
 int main()
 {	
-	//Has Wiringpi iuse BCM number s
-	wiringPiSetupGpio();
+	//Has wiringpi use the BCM gpio numbers, which matches with gpio commands in terminal
+	wiringPiSetup();	
+
 	//Holds final frequency measurement
 	double freq = 0;
-	//Counter
-	uint32_t i = 0;
-	//Stores timestamps for calculating period
-	clock_t start = 0;
-	clock_t end = 0;
-	//Sum of 10 signal periods measured in clock cycles
-	clock_t sum_T = 0;
+	//A counter
+	uint32_t c = 0;
 	/* Sets up interrupts */
-	system("gpio mode 0 in");
-	system("gpio edge 0 falling");
 
-	/* Averages 10 periods of signal*/
-//	for(i = 0;i<10;i++){
-		printf("%i\n",waitForInterrupt(0,-1));
-		start = clock();	
-		printf("%i\n",waitForInterrupt(0,-1));
-		end = clock();
-		sum_T += (end-start);
-//	}
-	//calculates average freqency and converts to hz using
-	//CLOCKS_PER_SEC macro
-	freq = ((double)sum_T);//CLOCKS_PER_SEC;
-	
-	printf("%.4f\n",freq);
+	wiringPiISR(0,INT_EDGE_FALLING,FREQ_ISR);
+
+	//waits for all timestamps to be filled
+	while(timeStamps[20] == 0){;}
+
+	//Calculates frequency averaged over 10 periods
+	for(c = 0;c < 10;c++){
+		freq += (double)(timeStamps[(2*c)+1]-timeStamps[2*c]);	
+	}
+	freq = 1./freq*10*CLOCKS_PER_SEC;//CLOCKS_PER_SEC macro converts us to hz properly 
+
+	printf("%.8f\n",freq);
+
 	return 0;
 
 
@@ -54,4 +59,17 @@ int main()
 
 }
 
+void FREQ_ISR(void)
+{	
+	//if statement prevents the case where another interrupt
+	//goes off while this one is still going at i = 19
+	//which would segfault this off the face of the fucking planet
+//	if(i<=19)
+		timeStamps[i] = clock();
+	//disabled interrupts after 20 timeStamps
+//	if(i >= 19)
+//		system ("/usr/local/bin/gpio edge 0 none") ;
+	i++;
+	printf("%i\n",i);
+}
 
