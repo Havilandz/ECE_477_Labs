@@ -16,9 +16,11 @@ to work with other stuff.
 #include <stdint.h>
 #include <stdlib.h>
 #include <time.h>
-
+#include <wiringPi.h>
 int main()
 {	
+	//Has Wiringpi iuse BCM number s
+	wiringPiSetupGpio();
 	//Holds final frequency measurement
 	double freq = 0;
 	//Counter
@@ -33,13 +35,13 @@ int main()
 	system("gpio edge 0 falling");
 
 	/* Averages 10 periods of signal*/
-	for(i = 0;i<10;i++){
+//	for(i = 0;i<10;i++){
 		waitForInterrupt(0,-1);
 		start = clock();
 		waitForInterrrupt(0,-1);
 		end = clock();
-		sum_T += (start-end);
-	}
+		sum_T += (end-start);
+//	}
 	//calculates average freqency and converts to hz using
 	//CLOCKS_PER_SEC macro
 	freq = CLOCKS_PER_SEC * 10.0 / sum_T;
