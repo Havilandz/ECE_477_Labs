@@ -25,10 +25,10 @@ int main()
 {	
 	wiringPiSetup();
 	pinMode(0,INPUT);
-
+	int *data_pointer = (int*)malloc(sizeof(int));
 	clock_t start, end;
 	start = clock();
-	digitalRead(0);
+	data_pointer[0] = digitalRead(0);
 	end = clock();
 	printf("%.8f\n", ((double)(end-start))/CLOCKS_PER_SEC);
 	return 0;
