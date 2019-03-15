@@ -24,7 +24,7 @@
 
 #define DATA_LENGTH 1000 
 
-
+void program_board(int offset);
 float calc_freq(uint32_t *data,unsigned int length, int Fs);
 int main()
 {	
@@ -36,17 +36,30 @@ int main()
 	uint32_t i = 0;
 	//Gets the frequency back
 	float freq = 0;
-
+	//Used for building adjustmetns to EEPROM
+	int32_t EEPROM_offset = 0;
+	int32_t EEPROM_range[2] = {-20,20};
 	//sets reading pin to input
 	pinMode(0,INPUT);
-	//takes samples at ~400Hz 
-	for(i = 0;i<DATA_LENGTH;i++){
-		data_pointer[i] = digitalRead(0);	
-		usleep(2432);
+	while(freq < 90 || freq > 110){
+		//takes samples at ~400Hz 
+		for(i = 0;i<DATA_LENGTH;i++){
+			data_pointer[i] = digitalRead(0);	
+			usleep(2432);
+		}
+		//calculates frequency
+		freq = calc_freq(data_pointer, DATA_LENGTH, 400);
+		printf("%.8f\n",freq);
+		//determines offset to try when reprogramming
+		if(freq > 110){
+			EEPROM_range[1] = EEPROM_offset -1;
+		}
+		if(freq < 90){
+			EEPROM_range[0] = EEPROM_offset +1;		
+		}	
+		EEPROM_offset = (EEPROM_range[0] + EEPROM_range[1])/2;	
+		printf("%i\n",EEPROM_offset);
 	}
-	//calculates frequency
-	freq = calc_freq(data_pointer, DATA_LENGTH, 400);
-	printf("%.8f\n",freq);
 	return 0;
 	
 
@@ -86,6 +99,9 @@ float calc_freq(uint32_t *data,unsigned int length, int Fs)
 	//calculates average period and returns frequency
 	return ((float)periods)/totalT*Fs;
 }
+//programs the board EEPROM memory
+void program_board(int offset){
 
 
+}
 
