@@ -36,15 +36,15 @@ int main()
 
 	/* Averages 10 periods of signal*/
 //	for(i = 0;i<10;i++){
-		waitForInterrupt(0,-1);
-		start = clock();
-		waitForInterrrupt(0,-1);
+		printf("%i\n",waitForInterrupt(0,-1));
+		start = clock();	
+		printf("%i\n",waitForInterrupt(0,-1));
 		end = clock();
 		sum_T += (end-start);
 //	}
 	//calculates average freqency and converts to hz using
 	//CLOCKS_PER_SEC macro
-	freq = CLOCKS_PER_SEC * 10.0 / sum_T;
+	freq = ((double)sum_T);//CLOCKS_PER_SEC;
 	
 	printf("%.4f\n",freq);
 	return 0;
