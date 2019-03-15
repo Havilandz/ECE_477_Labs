@@ -50,7 +50,7 @@ int main()
 		}
 		//calculates frequency
 		freq = calc_freq(data_pointer, DATA_LENGTH, 400);
-		printf("Frequency: %.8f\n",freq);
+		printf("Frequency: %.3fhz\n",freq);
 		//determines offset to try when reprogramming
 		if(freq > 110){
 			EEPROM_range[1] = EEPROM_offset -1;
