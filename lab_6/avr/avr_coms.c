@@ -4,23 +4,38 @@ Serial Communications Routines for AVR side
 of ece477 lab 6 using lab specifications
 
 Authors: Zach Haviland
-	Steph _LASTNAME_
-
+	 Steph Poirier
+	Hunter Gross
+Communication Details: 
+Baud:1200hz
+8 bit no paritu 2 stop 
 
 */
 
 #include<stdint>
 #include "avr_coms.h"
-//Sets up stdin and stdout for the AVR as well as serial parameters
+#include <avr/interrupt.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define F_CPU 1000000UL
+#include <util/delay.h>
+static FILE serial_stream = FDEV_SETUP_STREAM(serial_write, serial_read, _FDEV_SETUP_RW);
+
+//Sets up stdin and stdout for the AVR as well as serial parameters, returns a file descriptor to the serial stream
 void serial_init(void)
 {
-
-
-
+	UBRR0H=0;
+	UBRR0L=12; // 1200 BAUD FOR 1MHZ SYSTEM CLOCK
+	UCSR0A= 1<<U2X0;
+	UCSR0C= (1<<USBS0)|(3<<UCSZ00) ;  // 8 BIT NO PARITY 2 STOP
+	UCSR0B=(1<<RXEN0)|(1<<TXEN0)  ; //ENABLE TX AND RX ALSO 8 BIT
+	stdin=&serial_stream;
+	stdout=&serial_stream;
 
 
 }
-//reads from serial input on stdin
+//reads a character from serial input on stdin
 uint8_t  serial_read(void)
 {
 
@@ -32,7 +47,7 @@ uint8_t  serial_read(void)
 
 }
 
-//Sends to stdout on serial
+//Sends a character to stdout on serial
 void  serial_write(void){
 
 
