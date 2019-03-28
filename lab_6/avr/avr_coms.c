@@ -17,7 +17,6 @@ Baud:1200hz
 #include <avr/interrupt.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 #define F_CPU 1000000UL
 #include <util/delay.h>
 static FILE serial_stream = FDEV_SETUP_STREAM(serial_write, serial_read, _FDEV_SETUP_RW);
@@ -35,28 +34,18 @@ void serial_init(void)
 
 
 }
-//reads a character from serial input on stdin
-uint8_t  serial_read(void)
+//reads from serial input on stdin
+uint8_t  serial_read(FILE * fp)
 {
-
-
-
-
-
-
-
+	while((UCSR0A & (1<<RXC0)) == 0); 	//waits for a single char, multiple chars could be lost
+	return UDR0;
 }
 
-//Sends a character to stdout on serial
-void  serial_write(void){
-
-
-
-
-
-
-
-
-
+//Sends to stdout on serial
+void  serial_write(char key, FILE * fp)
+{
+	while((UCSR0A & (1<<UDRE0)) == 0); 	//waits until register is empty
+	UDR0 = key;
+	return 0;
 }
 

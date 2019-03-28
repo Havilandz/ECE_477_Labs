@@ -14,6 +14,6 @@ Authors: Zach Haviland
 
 //Sets up stdin and stdout for the AVR as well as serial parameters
 void serial_init(void);
-uint8_t  serial_read(void);
-void  serial_write(void);
+uint8_t  serial_read(FILE *);
+uint8_t  serial_write(char, FILE *);
 
