@@ -17,7 +17,7 @@ Baud:1200hz
 #include <avr/interrupt.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define F_CPU 1000000UL
+
 
 static FILE serial_stream = (FILE)FDEV_SETUP_STREAM(serial_write, serial_read, _FDEV_SETUP_RW);
 
