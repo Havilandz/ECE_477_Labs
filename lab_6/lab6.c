@@ -1,6 +1,6 @@
 /* 
  * Lab 6 source code
- * Authors: Hunter Gross, Zach Haviland, Stephanie Poirier
+ * Authors: Bruce Segee Hunter Gross, Zach Haviland, Stephanie Poirier
  *
  * This program sends and receives data to and from the serial port
  * ttyS0 on a RPi 3. 
@@ -14,7 +14,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
-
+#include <wiringPi.h>
 void from_to(int ,int);
 void setup_stdin(void);
 
@@ -25,18 +25,26 @@ int init(void);
  int main(int argc, char* argv[])
 // todo command line arguments
  { 
+	//The wiringpi stuff is to pull the reset line high to reset the avr then hold it low
+	wiringPiSetup();
 	int fd1;
-	char buf[1000];
+	char buf[1000];	
+	pinMode(26, OUTPUT);
+	digitalWrite(26, 0);
 	setup_stdin();
 	fd1=init();
 	if(fd1 == -1) 
 		return -1;
 //todo make sure fd1 is ok
-	if(fork()) 
-		from_to(fd1,1);
-	else 
-		from_to(0,fd1);
+	digitalWrite(26, 1);
 
+	if(fork()){ 
+		
+		from_to(fd1,1);
+	}
+	else {
+		from_to(0,fd1);
+	}
 	//todo sure would be nice to have an exit condition
 	 return 1;
 

@@ -21,10 +21,12 @@ int main(void)
 {
 	serial_init();
 	_delay_ms(3000);
+	//FILE *fpoutput = stdout;
 	while(1)
 	{
 		high_low();
-
+	//	fprintf(fpoutput, "U");
+	//	_delay_ms(5);
 	}
 	return 0;
 }

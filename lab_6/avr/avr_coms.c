@@ -24,7 +24,7 @@ static FILE serial_stream = (FILE)FDEV_SETUP_STREAM(serial_write, serial_read, _
 //Sets up stdin and stdout for the AVR as well as serial parameters, returns a file descriptor to the serial stream
 void serial_init(void)
 {
-	UBRR0H= (unsigned char)(UBRRN > 8);
+	UBRR0H= (unsigned char)(UBRRN >> 8);
 	UBRR0L=(unsigned char)UBRRN; // 1200 BAUD FOR 8MHZ SYSTEM CLOCK
 	//UBRR0H= 0;
 	//UBRR0L= 96; // 1200 BAUD FOR 1MHZ SYSTEM CLOCK
