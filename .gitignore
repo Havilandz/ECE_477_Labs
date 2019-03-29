@@ -1,0 +1,13 @@
+*
+!*/
+!*.c
+!*.h
+!*.m
+!*.p
+!*.md
+!*.mk
+!Makefile
+!Doxyfile
+!README
+!scripts/*
+startssh.sh

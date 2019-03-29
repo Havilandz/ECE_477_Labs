@@ -1,7 +1,7 @@
 TARGET=lab6
 CFLAGS= -Wall -g
 OBJS=lab6.o
-LIBS=
+LIBS= -lwiringPi
 
 all: ${TARGET}
 
