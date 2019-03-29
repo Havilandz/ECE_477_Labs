@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <wiringPi.h>
+#include <time.h>
 void from_to(int ,int);
 void setup_stdin(void);
 
@@ -28,6 +29,7 @@ int init(void);
 	//The wiringpi stuff is to pull the reset line high to reset the avr then hold it low
 	wiringPiSetup();
 	int fd1;
+	unsigned char seed = time(0);
 	char buf[1000];	
 	pinMode(26, OUTPUT);
 	digitalWrite(26, 0);
@@ -37,7 +39,8 @@ int init(void);
 	return -1;
 //todo make sure fd1 is ok
 	digitalWrite(26, 1);
-
+	write(fd1,&seed,1);
+	write(fd1,"\r",1);
 	if(fork()){ 
 		
 		from_to(fd1,1);
