@@ -29,6 +29,8 @@ int init(void);
 	char buf[1000];
 	setup_stdin();
 	fd1=init();
+	if(fd1 == -1) 
+		return -1;
 //todo make sure fd1 is ok
 	if(fork()) 
 		from_to(fd1,1);
