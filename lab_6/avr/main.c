@@ -44,7 +44,7 @@ void high_low(void)
 	
 	fprintf(fpoutput, "Enter a positive whole number between 0 and 5,000 \r\n");
 	
-	guess = solution + 1;
+	guess = solution + 1; //prevents corner case where guess == answer at beginning of program
 	
 	while(guess != solution)
 	{
