@@ -21,9 +21,15 @@ int main(void)
 {
 	serial_init();
 	_delay_ms(3000);
+
+	FILE *fpoutput = stdout;
 	while(1)
 	{
-		high_low();
+		//high_low();
+
+		_delay_ms(3000);
+
+		fprintf(fpoutput,"Welcome to the high-low guessing game \r\n");	
 	}
 	return 0;
 }
@@ -41,7 +47,7 @@ void high_low(void)
 	solution = rand()%5000;
 	fpinput = stdin;
 	fpoutput = stdout;
-	
+	fprintf(fpoutput,"Welcome to the high-low guessing game \r\n");	
 	fprintf(fpoutput, "Enter a positive whole number between 0 and 5,000 \r\n");
 	
 	guess = solution + 1; //prevents corner case where guess == answer at beginning of program
