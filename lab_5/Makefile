@@ -6,7 +6,7 @@ CHIP=atmega324pa
 ACFLAGS=-mmcu=${CHIP}
 
 program: a.hex
-	sudo avrdude ${AVR_CONF} -c pi_1 -p ${CHIP} -D -U flash:w:a.hex:i
+	sudo avrdude ${AVR_CONF} -c pi_1 -p ${CHIP}  -U flash:w:a.hex:i
 
 
 a.hex: a.out

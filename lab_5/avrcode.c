@@ -28,10 +28,10 @@ int main()
   update_clock_speed();  //adjust OSCCAL
   init_pwm();            //set up hardware PWM
 
-  GICR = 1<<INT0; // Enable INT0 interrupt (Physical pin 16)
-  MCUCR = 1<<ISC01 | 1<<ISC00; // Set interrupt trigger to rising edge
+  //GICR = 1<<INT0; // Enable INT0 interrupt (Physical pin 16)
+  //MCUCR = 1<<ISC01 | 1<<ISC00; // Set interrupt trigger to rising edge
 
-  sei(); // Enable global interrupt
+  //sei(); // Enable global interrupt
 
   while(1); //literally nothing left to do
 }
