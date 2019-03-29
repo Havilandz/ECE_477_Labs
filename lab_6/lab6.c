@@ -47,7 +47,7 @@ int init(void);
 	struct termios tc;
 	tcgetattr(0, &tc);
 	tc.c_lflag &=~ICANON ;
-	tc.c_lflag &=~ECHO;
+	tc.c_lflag |=ECHO;
 	tcsetattr(0, TCSANOW, &tc);
 }
 
