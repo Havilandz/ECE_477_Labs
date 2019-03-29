@@ -6,6 +6,7 @@ of ece477 lab 6 using lab specifications
 Authors: Zach Haviland
 	 Steph Poirier
 	Hunter Gross
+Nominally a modification of code written by Bruce Segee
 Communication Details: 
 Baud:1200hz
 8 bit no paritu 2 stop 

@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <wiringPi.h>
+#include <time.h>
 void from_to(int ,int);
 void setup_stdin(void);
 

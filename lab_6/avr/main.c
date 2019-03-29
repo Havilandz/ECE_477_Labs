@@ -2,7 +2,7 @@
 
 Simple High Low Guessing Game Over UART
 Authors: Zach Haviland, Steph Poirier, Hunter Gross
-
+Nominally a modification of code by Bruce Segee
 
 
 */
