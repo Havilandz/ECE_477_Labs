@@ -9,87 +9,65 @@
  *
  */
 
-#include <sys/select.h>
 #include <stdio.h>
+#include <termios.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include<fcntl.h>
-#define READ_BUFF_SIZE 50
-#define KEY_BUFF_SIZE 10
-#define STDIN 0
+#include <fcntl.h>
+#include <string.h>
 
-int accessSerial(int n, int fd);
+void from_to(int ,int);
+void setup_stdin(void);
 
-int main(int argc, char* argv[])
-{
-	/* Buffer where key presses get stored */
-	unsigned char keys[KEY_BUFF_SIZE];
-	
-	/* file descriptor for serial and ready flag for select()
-	index for key buffer and process id */
-	int fd, ready, i=0, pid;
+int init(void);
 
-	/* Buffer where data from serial is stored */
-	unsigned char readOut[READ_BUFF_SIZE];
 
-	/* fd_set structs for select() */
-	fd_set read_set, write_set;
-			
-	/* fills the fd_set structs */
-	FD_SET(fd, &write_set); // write to serial
-	FD_SET(fd, &read_set); // read from serial 
-	FD_SET(STDIN, &read_set); // read from stdin
-	
-	while (1) {
-		/* select waits for a file descriptor to be ready to use */
-		ready = select(2, &read_set, &write_set, NULL, NULL); 	
 
-		/* select throws -1 for errors */
-		if (ready == -1) {
-			printf("Error with select()\n");
-			return -1;
-		}
-		/* select throws 0 when it times out */
-		else if (ready == 0) {
-			printf("select() timed out\n");
-			return 1;
-		}
-		/* if select is successful */
-		else {
-			if (FD_ISSET(fd, &read_set)) { // Serial read is ready
-				accessSerial(0,fd);
-				do {
-				read(fd, &readOut, 1);
-				}while (*readOut != '\0'); // Assumes data is null terminated
-				accessSerial(1,fd);
-			}
-			if (FD_ISSET(fd, &write_set)) { // Serial write is ready
-				accessSerial(0,fd);
-				write(fd, &keys, 1);
-				accessSerial(1,fd);
-			}
-			if(FD_ISSET(STDIN, &readOut)) { // stdin read is ready	
-				keys[++i] = getchar();
-			}
-		}
-	}
-	return 0;
+ int main()
+// todo command line arguments
+ { int fd1;
+   char buf[1000];
+   setup_stdin();
+   fd1=init();
+//todo make sure fd1 is ok
+   if(fork()) from_to(fd1,1);
+   else from_to(0,fd1);
+
+   //todo sure would be nice to have an exit condition
+     return 1;
+
+ }
+
+ void setup_stdin(void)
+ { struct termios tc;
+   tcgetattr(0, &tc);
+   tc.c_lflag &=~ICANON ;
+   tc.c_lflag &=~ECHO;
+   tcsetattr(0, TCSANOW, &tc);
 }
 
-int accessSerial(int n, int fd)
-{
-	if (n == 0) {
 
-		fd = open("/dev/ttyS0",O_RDWR);
-	
-		if (!fd) {
-			printf("NULL POINTER! ttylS0 failed to open\n");
-			return -1;
-		}
-		return fd;
-	}
-	if (n == 1) {
-		close(fd);
-		return 0;
- 	}
-}
+void from_to(int f1, int f2)
+{  char c;
+   while(1) if(read(f1,&c,1))write(f2,&c,1);  }
+
+  int  init()
+  {
+    int fd1;
+    struct termios tc;                // terminal control structure
+
+    //todo serial port should not be hard coded
+    fd1 = open("/dev/ttyS0", O_RDWR|O_NOCTTY);  // really ought to check for error
+    tcgetattr(fd1, &tc);
+    tc.c_iflag = IGNPAR;
+    tc.c_oflag = 0;
+    tc.c_cflag = CS8 | CREAD | CLOCAL; //8 bit chars enable receiver no modem status lines
+    tc.c_lflag =0 ;
+
+    //todo baud rate should not be hard coded
+    cfsetispeed(&tc, B1200);
+    cfsetospeed(&tc, B1200);
+    //todo should have bits per character set
+    tcsetattr(fd1, TCSANOW, &tc);
+  return fd1;
+ }
+
