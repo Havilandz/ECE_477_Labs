@@ -21,15 +21,10 @@ int main(void)
 {
 	serial_init();
 	_delay_ms(3000);
-
-	FILE *fpoutput = stdout;
 	while(1)
 	{
-		//high_low();
+		high_low();
 
-		_delay_ms(3000);
-
-		fprintf(fpoutput,"Welcome to the high-low guessing game \r\n");	
 	}
 	return 0;
 }
