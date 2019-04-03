@@ -1,5 +1,5 @@
 #AVR programmer makefile
-OBJS=avr_coms.c main.c 
+OBJS=avr_coms.c main.c led.c 
 AVR_CONF=-C ../../avrdude_gpio.conf
 ACC=avr-gcc
 CHIP=atmega324pa
