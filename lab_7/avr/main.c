@@ -4,19 +4,26 @@
 #include <avr/io.h>
 #include "led.h"
 #include "avr_adc.h"
+#include "avr_coms.h"
 
-int main(int argc, char* argv[])
+void main(int argc, char* argv[])
 {
-	initPS();
-	initLEDs();
+
+	serial_init();
+	_delay_ms(3000);
+		
 
 	FILE *input, *output;
 	uint8_t n = 0;
+	double measurement;
+	initLEDs();
+	initPS();
 	input = stdin;
 	output = stdout;
-
-	fscanf(input, "%i", &n);
-
-	setLEDs(n);
-	measurePS();	
+	while(1) {
+		fscanf(input, "%i", &n);
+		setLEDs(n);
+		measurement = measurePS();
+		fprintf(output, "The power rail is at %d Volts\r\n", measurement);
+	}
 }
