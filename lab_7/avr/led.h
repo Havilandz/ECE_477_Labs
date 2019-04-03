@@ -1,7 +1,7 @@
 #ifndef LED_H
 #define LED_H
 
-void ledInit(void);
-void toggleLEDs(int led);
+void initLEDs(void);
+void setLEDs(int led);
 
 #endif

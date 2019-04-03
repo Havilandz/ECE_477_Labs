@@ -6,7 +6,7 @@
 #include <util/delay.h>
 #include <stdint.h>
 
-void ledInit(void)
+void initLEDs(void)
 {
 	DDRC = 0xff;
 	PORTC = 0xff;
@@ -14,7 +14,7 @@ void ledInit(void)
 	PORTC = 0x00l;
 }
 
-void toggleLEDs(uint8_t led)
+void setLEDs(uint8_t led)
 {
 	PORTC = led;
 }
