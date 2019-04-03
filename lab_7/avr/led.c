@@ -8,7 +8,9 @@
 
 void initLEDs(void)
 {
-	DDRC = 0xff;
+	DDRC = 0xff; // Sets PORTC as output
+
+	/* Test all LEDs */
 	PORTC = 0xff;
 	_delay_ms(500);
 	PORTC = 0x00l;
