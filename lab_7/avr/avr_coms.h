@@ -15,6 +15,7 @@ Authors: Zach Haviland
 #include<stdio.h>
 //Sets up stdin and stdout for the AVR as well as serial parameters
 void serial_init(void);
+//It occurs to me that the below two prototypes probably shouldn't be here
 int  serial_read(FILE *);
 int  serial_write(char, FILE *);
 
