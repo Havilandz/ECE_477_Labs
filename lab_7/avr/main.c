@@ -14,7 +14,7 @@ void main(int argc, char* argv[])
 		
 
 	FILE *input, *output;
-	uint8_t n = 0;
+	int n = 0;
 	double measurement;
 	initLEDs();
 	initPS();
@@ -22,6 +22,8 @@ void main(int argc, char* argv[])
 	output = stdout;
 	while(1) {
 		fscanf(input, "%i", &n);
+		n &= 0xff00;
+		n = (uint8_t)n;
 		setLEDs(n);
 		measurement = measurePS();
 		fprintf(output, "The power rail is at %d Volts\r\n", measurement);
