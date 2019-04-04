@@ -51,6 +51,6 @@ void main(int argc, char* argv[])
 		
 		/* Takes the supply voltage measurement and sends it to the terminal */
 		measurement = measurePS();
-		fprintf(output, "The power rail is at %d Volts\r\n", measurement);
+		fprintf(output, "The power rail is at %d Volts %.6f \r\n", measurement, 1.1*1024/measurement);
 	}
 }

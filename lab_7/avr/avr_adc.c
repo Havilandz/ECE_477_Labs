@@ -4,7 +4,7 @@
 #include <avr/io.h>
 #include "avr_adc.h"
 
-#define BANDGAP_V 1.1
+#define BANDGAP_V 1.1F
 
 void initPS(void)
 {
@@ -28,6 +28,8 @@ double measurePS(void)
 	ADCSRA |= (1<<ADSC); //Start ADC conversion
 
 	while(ADCSRA&(1<<ADSC)); //wait for conversion to be done
-	return BANDGAP_V*1024./(ADCH<<2); //Calculate reference voltage Avcc
+	//return BANDGAP_V*1024./(ADCH<<2); //Calculate reference voltage Avcc
+	return (ADCH<<2); //Calculate reference voltage Avcc
+
 
 }
