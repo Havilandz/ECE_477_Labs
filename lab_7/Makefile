@@ -1,6 +1,6 @@
 TARGET=uartPi
 CFLAGS= -Wall -g
-OBJS= UART_pi.o
+OBJS= UART_pi_lab7.o
 LIBS= -lwiringPi
 
 all: ${TARGET} 

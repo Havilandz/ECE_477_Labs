@@ -25,7 +25,7 @@ void main(int argc, char* argv[])
 {
 	FILE *input, *output; 	// File pointers for stdin and stdout
 	int n = 0; 		// Integer for reading from stdin
-	double measurement; 	// Power supply measurement to be taken
+	unsigned int measurement = 0; 	// Power supply measurement to be taken
 
 	/* Serial communication setup */
 	serial_init();
@@ -50,7 +50,7 @@ void main(int argc, char* argv[])
 		setLEDs(n);
 		
 		/* Takes the supply voltage measurement and sends it to the terminal */
-		measurement = measurePS();
-		fprintf(output, "The power rail is at %d Volts %.6f \r\n", measurement, 1.1*1024/measurement);
+		measurement = adcRead();
+		fprintf(output, " %i\r\n", measurement);
 	}
 }
