@@ -26,7 +26,8 @@ double measurePS(void)
 {
 
 	ADCSRA |= (1<<ADSC); //Start ADC conversion
-	while(ADSRA & (1<<ADSC)); //wait for conversion to be done
-	return BANDGAP_V*1024/ADCH; //Calculate reference voltage Avcc
+
+	while(ADCSRA&(1<<ADSC)); //wait for conversion to be done
+	return BANDGAP_V*1024./ADCH; //Calculate reference voltage Avcc
 
 }
