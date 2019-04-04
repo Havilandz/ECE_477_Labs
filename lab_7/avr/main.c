@@ -39,7 +39,7 @@ void main(int argc, char* argv[])
 		fscanf(input, "%i", &n); // Read from serial
 
 		/* Formats n into uint8_t to prevent unintended behavior */
-		n &= 0xff00;
+		n &= 0xff;
 		n = (uint8_t)n;
 		
 		setLEDs(n);
