@@ -17,6 +17,7 @@
 #include "led.h"
 #include "avr_adc.h"
 #include "avr_coms.h"
+#include <util/delay>
 
 void main(int argc, char* argv[])
 {
@@ -26,12 +27,13 @@ void main(int argc, char* argv[])
 
 	/* Serial communication setup */
 	serial_init();
-	_delay_ms(3000);
+
 		
 	/* External function initialization */
 	initLEDs();
 	initPS();
-	
+
+	_delay_ms(3000);
 	input = stdin;
 	output = stdout;
 	
