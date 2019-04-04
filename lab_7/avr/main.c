@@ -40,7 +40,8 @@ void main(int argc, char* argv[])
 	output = stdout;
 	
 	while(1) {
-		fscanf(input, "%i", &n); // Read from serial
+		while(fscanf(input, "%i", &n) != 1) // Read from serial
+			fscanf(input, "%*s");
 
 		/* Formats n into uint8_t to prevent unintended behavior */
 		n &= 0xff;
