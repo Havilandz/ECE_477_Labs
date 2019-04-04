@@ -9,7 +9,9 @@
  * communication to be printed to the terminal.
  */
 
-
+#ifndef F_CPU
+#define F_CPU 8000000UL
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -17,7 +19,7 @@
 #include "led.h"
 #include "avr_adc.h"
 #include "avr_coms.h"
-#include <util/delay>
+#include <util/delay.h>
 
 void main(int argc, char* argv[])
 {

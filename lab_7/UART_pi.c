@@ -30,7 +30,7 @@ int init(void);
 	wiringPiSetup();
 	int fd1;
 	unsigned char seed = time(0);
-	char buf[1000];	
+	//char buf[1000];	
 	pinMode(26, OUTPUT);
 	digitalWrite(26, 0);
 	setup_stdin();
