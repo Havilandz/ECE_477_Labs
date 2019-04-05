@@ -51,6 +51,6 @@ void main(int argc, char* argv[])
 		
 		/* Takes the supply voltage measurement and sends it to the terminal */
 		measurement = adcRead();
-		fprintf(output, " %i\r\n", measurement);
+		fprintf(output, " %f  \r\n", 1.1*1024./measurement);
 	}
 }

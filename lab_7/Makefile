@@ -1,7 +1,7 @@
 TARGET=uartPi
-CFLAGS= -Wall -g
+CFLAGS= -Wall -g -Wl,-u,vfprintf -lprintf_flt  
 OBJS= UART_pi_lab7.o
-LIBS= -lwiringPi
+LIBS= -lwiringPi -lm
 
 all: ${TARGET} 
 

@@ -3,7 +3,8 @@ OBJS=avr_coms.c main.c led.c avr_adc.c
 AVR_CONF=-C ../../avrdude_gpio.conf
 ACC=avr-gcc
 CHIP=atmega324pa
-ACFLAGS=-mmcu=${CHIP} -O1
+ACFLAGS=-mmcu=${CHIP} -O1 -Wl,-u,vfprintf -lprintf_flt 
+LIBS= -lprintf_flt -lm -lfp
 
 program: a.hex
 	sudo avrdude ${AVR_CONF} -c pi_1 -p ${CHIP} -U flash:w:a.hex:i

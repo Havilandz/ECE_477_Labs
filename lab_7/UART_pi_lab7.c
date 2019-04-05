@@ -29,7 +29,7 @@ int init(void);
 	//The wiringpi stuff is to pull the reset line high to reset the avr then hold it low
 	wiringPiSetup();
 	int avr_uart;
-
+	int tmp;
 	//char buf[1000];	
 	pinMode(26, OUTPUT);
 	digitalWrite(26, 0);
@@ -42,11 +42,11 @@ int init(void);
 
 
 	if(fork()){ 
-		
-		from_to(avr_uart,stdout);
+
+		from_to(avr_uart,1);//0 is stdin
 	}
 	else {
-		from_to(stdin,avr_uart);
+		from_to(0,avr_uart);//0 is stdin
 	}
 	//todo sure would be nice to have an exit condition
 	 return 1;
