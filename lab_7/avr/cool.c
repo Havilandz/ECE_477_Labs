@@ -2,13 +2,15 @@
  * Lab 7 Cool stuff 
  * Authors: Hunter Gross
  * 
- * WARNING!!! THIS PROBABLY WON'T WORK AS IS 
- * THIS IS AN ATTEMPTED CONCEPT
- *
  * This program takes input from the user from 0 to 3.3V 
  * and attempts to tune the adc reading to that voltage by 
  * switching off a specific amout of LEDs in order to draw
  * the correct amount of current to load the AVR.
+ *
+ * It is important to note that the amount of power
+ * supply voltage swing was overestimated when writing
+ * this program. The code functions as intended, however the 
+ * voltage doesn't change enough to make much of a difference.
  */
 
 #ifndef F_CPU
