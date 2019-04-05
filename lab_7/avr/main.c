@@ -39,6 +39,7 @@ void main(int argc, char* argv[])
 	input = stdin;
 	output = stdout;
 	
+	fprintf(output,"Enter a number between 0x00 and 0xff \r\n");
 	while(1) {
 		while(fscanf(input, "%i", &n) != 1) // Read from serial
 			fscanf(input, "%*s");

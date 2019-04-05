@@ -31,8 +31,9 @@ int main(int argc, char* argv[])
 {
 	FILE *input, *output; 	// File pointers for stdin and stdout
 	uint8_t i;			// Counter for do/while
+	unsigned int temp = 0; //temporary place to read from serial
 	float max;		// Max voltage (set by the user)
-	float vref;		// measured power supply voltage
+	float vref = 0;		// measured power supply voltage
 	int measurement;	// measured adc value
 	
 	/* serial communication setup */
@@ -47,26 +48,25 @@ int main(int argc, char* argv[])
 	output = stdout;
 
 	while(1) {
-		fprintf(output,"Enter a voltage max between 0 and 3.3, multipied by 1000 (don't ask just do)\r\n");
-		while(fscanf(input, "%i", &max) != 1) 	// read from serial
+		fprintf(output,"Enter a voltage max between 0 and 3.3 multiplied by 1000 (don't ask just do) \r\n");
+		while(fscanf(input, "%i", &temp) != 1) 	// read from serial
 			fscanf(input, "%*s");
-		max/=1000;	
+		max= (float)temp/1000;	
 		/* Keeps user input within proper voltage bounds */
 		if (max < 0) max = 0;
 		if (max > 3.3) max = 3.3;
 		i = 0xff;
-		setLEDs(i);
-		do {
+		
+		do{
+			setLEDs(i);
 			fprintf(output, "Calculating voltage...\r\n");
 			_delay_ms(600);
 			measurement = adcRead();
-			vref = (1024*VIN)/measurement;	
+			vref = 1024.*(VIN/measurement);	
 			i /= 2;
-			setLEDs(i);
 			_delay_ms(600);
-			fprintf(output, "%f \r\n", vref);
-		} while((vref < max) && (i > 0x00));
-		
+			fprintf(output, "%f %f \r\n", vref, max);
+		}	while((vref < max) && (i > 0x00));
 		fprintf(output,"The power supply has been limited to %f Volts \r\n", vref);
 	}
 }
