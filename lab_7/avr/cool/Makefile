@@ -1,6 +1,6 @@
 #VR programmer makefile
-OBJS=avr_coms.c main.c led.c avr_adc.c
-AVR_CONF=-C ../../avrdude_gpio.conf
+OBJS=../avr_coms.c cool.c ../led.c ../avr_adc.c
+AVR_CONF=-C ../../../avrdude_gpio.conf
 ACC=avr-gcc
 CHIP=atmega324pa
 ACFLAGS=-mmcu=${CHIP} -O1 -Wl,-u,vfprintf -lprintf_flt 

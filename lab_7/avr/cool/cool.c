@@ -18,17 +18,17 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <avr/io.h>
-#include "led.h"
-#include "avr_adc.h"
-#include "avr_coms.h"
+#include "../led.h"
+#include "../avr_adc.h"
+#include "../avr_coms.h"
 #include <util/delay.h>
 
 #define VIN 1.1
 
-int main(int argc char* argv[])
+int main(int argc, char* argv[])
 {
-	FILE *input, *output 	// File pointers for stdin and stdout
-	int i;			// Counter for do/while
+	FILE *input, *output; 	// File pointers for stdin and stdout
+	uint8_t i;			// Counter for do/while
 	float max;		// Max voltage (set by the user)
 	float vref;		// measured power supply voltage
 	int measurement;	// measured adc value
@@ -40,29 +40,32 @@ int main(int argc char* argv[])
 	initLEDs();
 	initPS();
 
-	_delay_ms(3000);
+	_delay_ms(500);
 	input = stdin;
 	output = stdout;
 
 	while(1) {
-		while(fscanf(input, "%f", &max) != 1) 	// read from serial
+		fprintf(output,"Enter a voltage max between 0 and 3.3, multipied by 1000 (don't ask just do)\r\n");
+		while(fscanf(input, "%i", &max) != 1) 	// read from serial
 			fscanf(input, "%*s");
-		
+		max/=1000;	
 		/* Keeps user input within proper voltage bounds */
 		if (max < 0) max = 0;
 		if (max > 3.3) max = 3.3;
-
 		i = 0xff;
+		setLEDs(i);
 		do {
-			setLEDs(i);
-			_delay_us(100);
+			fprintf(output, "Calculating voltage...\r\n");
+			_delay_ms(600);
 			measurement = adcRead();
 			vref = (1024*VIN)/measurement;	
-			i << 1;
-			_delay_us(100);
-		} while(vref > max);
+			i /= 2;
+			setLEDs(i);
+			_delay_ms(600);
+			fprintf(output, "%f \r\n", vref);
+		} while((vref < max) && (i > 0x00));
 		
-		fprintf(output,"The power supply has been limited to %f Volts", vref);
+		fprintf(output,"The power supply has been limited to %f Volts \r\n", vref);
 	}
 }
-	
+
