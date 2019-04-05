@@ -35,7 +35,7 @@ void main(int argc, char* argv[])
 	initLEDs();
 	initPS();
 
-	_delay_ms(3000);
+	_delay_ms(500);
 	input = stdin;
 	output = stdout;
 	
@@ -51,6 +51,6 @@ void main(int argc, char* argv[])
 		
 		/* Takes the supply voltage measurement and sends it to the terminal */
 		measurement = adcRead();
-		fprintf(output, " %f  \r\n", 1.1*1024./measurement);
+		fprintf(output, "The power supply voltage is  %fV  \r\n", 1.1*1024./measurement);
 	}
 }
