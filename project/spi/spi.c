@@ -1,4 +1,4 @@
-/*
+*
  * SPI Initialization Source File
  * Authors: Hunter Gross, Zach Haviland, Stephanie Poirier
  *
