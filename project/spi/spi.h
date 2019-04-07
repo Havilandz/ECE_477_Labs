@@ -9,10 +9,13 @@
 
 #ifndef SPI_H
 #define SPI_H
+
+#ifndef F_CPU
+#define F_CPU 8000000UL // 8MHz Clock
 #endif
 
 
-/* Macros for SPI related pins */
+/* Macros for SPI  */
 #define SPI_SS_DDR DDRB
 #define SPI_SS_PORT PORTB
 #define SPI_SS_PIN PB4
@@ -32,7 +35,12 @@
 #define SPI_SELECT_SLAVE SPI_SS_PORT &= ~(1<<SPI_SS_PIN)
 #define SPI_DESELECT_SLAVE SPI_SS_PORT |= (1<<SPI_SS_PIN)
 
+/* Macros for 3 pin SPI via USART */
+#define UBRRN 31 // Divides the clock by 64 
+
 /*  Function Prototypes */
 void USART_SPI_init(void);
 void SPI_init(void);
 
+
+#endif

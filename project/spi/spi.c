@@ -4,20 +4,25 @@
  *
  */
 
-#ifndef F_CPU
-#define F_CPU 8000000UL
-#endif
-
-#include <avr/io.h>
 #include "spi.h"
+#include <avr/io.h>
 
 
 /* Initializes 3 Pin SPI on the USART pins of an AVR */
 void USART_SPI_init()
 {
+	UCSR0C |= (1<<UMSEL01) | (1<<UMSEL00);
+
+	UCSR0B |= (1<<TXEN0); // Enable Transmitter
+
+	/* BAUD Rate */
+	UBRR0H |= (unsigned char)(UBRRN >> 8); 
+	UBRR0L |= (unsigned char)UBRRN;
 	
-
-
+	UCSR0C &= ~(1<<UCPHA0); // Set Clock Phase
+	UCSR0C &= ~(1<<UDORD0); // Set Big Endian (MSB)
+	
+	
 }
 	
 /* Initializes SPI on an AVR */
