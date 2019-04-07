@@ -33,5 +33,6 @@
 #define SPI_DESELECT_SLAVE SPI_SS_PORT |= (1<<SPI_SS_PIN)
 
 /*  Function Prototypes */
+void USART_SPI_init(void);
 void SPI_init(void);
 

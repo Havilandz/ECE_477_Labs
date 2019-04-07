@@ -12,6 +12,14 @@
 #include "spi.h"
 
 
+/* Initializes 3 Pin SPI on the USART pins of an AVR */
+void USART_SPI_init()
+{
+	
+
+
+}
+	
 /* Initializes SPI on an AVR */
 void SPI_init()
 {
