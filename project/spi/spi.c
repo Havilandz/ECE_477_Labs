@@ -1,4 +1,4 @@
-*
+/*
  * SPI Initialization Source File
  * Authors: Hunter Gross, Zach Haviland, Stephanie Poirier
  *
@@ -11,7 +11,7 @@
 /* Initializes 3 Pin SPI on the USART pins of an AVR */
 void USART_SPI_init()
 {
-	UCSR0C |= (1<<UMSEL01) | (1<<UMSEL00);
+	UCSR0C |= (1<<UMSEL01) | (1<<UMSEL00); //Enable USART in SPI mode
 
 	UCSR0B |= (1<<TXEN0); // Enable Transmitter
 
