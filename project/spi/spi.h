@@ -41,6 +41,7 @@
 /*  Function Prototypes */
 void USART_SPI_init(void);
 void SPI_init(void);
-
+int serial_read(FILE*);
+int serial_write(char key, FILE*);
 
 #endif
