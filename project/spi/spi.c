@@ -7,6 +7,7 @@
 #include "spi.h"
 #include <avr/io.h>
 
+static FILE serial_stream = (FILE)FDEV_SETUP_STREAM(serial_write, serial_read, _FDEV_SETUP_RW);
 
 /* Initializes 3 Pin SPI on the USART pins of an AVR */
 void USART_SPI_init()
@@ -21,7 +22,9 @@ void USART_SPI_init()
 	
 	UCSR0C &= ~(1<<UCPHA0); // Set Clock Phase
 	UCSR0C &= ~(1<<UDORD0); // Set Big Endian (MSB)
-	
+
+	stdin = &serial_stream;
+	stdout = &serial_stream;	
 	
 }
 	
