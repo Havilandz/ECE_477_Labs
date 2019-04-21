@@ -24,7 +24,7 @@
 
 
 int display[8];
-
+void clear(void);
 
 void max7219_init(void);
 void spi_clear(void);
@@ -101,4 +101,12 @@ void send_byte(int byte){
 
 
 
+}
+
+void clear(void)
+{
+    int i;
+    for (i = 0; i < 8; i++) {
+	write_column(i+1, 0);
+    }
 }
