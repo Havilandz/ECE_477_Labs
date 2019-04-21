@@ -1,6 +1,6 @@
 #VR programmer makefile
-OBJS= stacker.c spiBitBang.c
-AVR_CONF=-C ../avrdude_gpio.conf
+OBJS= test.c spi.c led.c led.h
+AVR_CONF=-C ../../avrdude_gpio.conf
 ACC=avr-gcc
 CHIP=atmega324pa
 ACFLAGS=-mmcu=${CHIP} -O1 -Wl,-u,vfprintf -lprintf_flt 

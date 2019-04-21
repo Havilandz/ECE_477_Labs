@@ -1,13 +1,51 @@
 /*
- * SPI Bit Bang Source File
- * Authors: Hunter Gross, Zach Haviland, Stephanie Poirier
+ * SPI Test Communication
+ * Author: Hunter Gross
+ *
  */
+#ifndef F_CPU
+#define F_CPU 8000000UL
+#endif
 
+#include "spi.h"
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <avr/io.h>
-#include "spiBitBang.h"
+#include <util/delay.h>
+#include "../led.h"
+
+#define CS_HIGH PORTA |= (1<<PA0)
+#define CS_LOW PORTA &= ~(1<<PA0)
+#define CLK_HIGH PORTA |= (1<<PA1)
+#define CLK_LOW PORTA &= ~(1<<PA1)
+#define DATA_HIGH PORTA |= (1<<PA2)
+#define DATA_LOW PORTA &= ~(1<<PA2)
+
+
+
+void clear(void); 
+
+void max7219_init(void);
+void write_board(int board, int row, int data);	
+void write_row(int row, int data);
+void send_byte(int byte);
+void noop(void);
+void spi_write(int addr,int  data);
+
+void main(int argc, char* argv[]) 
+{
+	max7219_init();
+
+
+	write_board(0, 1, 0x7e);
+
+
+	while(1) {
+		
+		_delay_ms(500);
+	}		
+}
 
 void max7219_init(void)
 {
