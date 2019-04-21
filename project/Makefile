@@ -1,13 +1,13 @@
 #VR programmer makefile
-OBJS= avrcode.c
+OBJS= spi/test.c spi/spi.c
 AVR_CONF=-C ../avrdude_gpio.conf
 ACC=avr-gcc
 CHIP=atmega324pa
-ACFLAGS=-mmcu=${CHIP} -O1 
-LIBS= 
+ACFLAGS=-mmcu=${CHIP} -O1 -Wl,-u,vfprintf -lprintf_flt 
+LIBS= -lprintf_flt -lm -lfp
 
 program: a.hex
-	avrdude -c avrispmkII -P usb -p ${CHIP} -U flash:w:a.hex:i
+	sudo avrdude ${AVR_CONF} -c pi_1 -p ${CHIP} -U flash:w:a.hex:i
 
 
 
@@ -19,7 +19,7 @@ a.out: ${OBJS}
 	${ACC} ${ACFLAGS} ${OBJS}
 
 fuses:
-	avrdude -c avrispmkII -P usb -p ${CHIP} -U lfuse:w:0xD2:m -U hfuse:w:0xD1:m -U efuse:w:0xff:m
+	sudo avrdude ${AVR_CONF} -c pi_1 -p ${CHIP} -U lfuse:w:0xD2:m -U hfuse:w:0xD1:m -U efuse:w:0xff:m
 clean:
 	rm -f *.hex *.out
 

@@ -13,7 +13,7 @@
 #ifndef F_CPU
 #define F_CPU 8000000UL // 8MHz Clock
 #endif
-
+#include<stdio.h>
 
 /* Macros for SPI  */
 #define SPI_SS_DDR DDRB
@@ -37,6 +37,7 @@
 
 /* Macros for 3 pin SPI via USART */
 #define UBRRN 31 // Divides the clock by 64 
+
 
 /*  Function Prototypes */
 void USART_SPI_init(void);
