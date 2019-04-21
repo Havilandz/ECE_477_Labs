@@ -71,7 +71,10 @@ void write_row(int board, int row, int data){
 	ct2 = 0;
 	ct3 = 0;
 	CS_HIGH;
-
+	switch(board)
+	case: 0
+	case 1
+	case 2
 
 
 
