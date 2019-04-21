@@ -6,7 +6,7 @@
  *
  */
 
-#include "spi/spi.h"
+#include "spiBitBang.h"
 #include <stdio.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
@@ -20,6 +20,9 @@ uint8_t prevRow = 0xff;
 int main(int argc, char* argv[])
 {
 	/* Initialization */
+	max7219_init();
+	currentRow = 1;
+	write_board(0,currentRow, 0x7E);
 	
 	/* Main Loop */
 

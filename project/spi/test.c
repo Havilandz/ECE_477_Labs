@@ -24,7 +24,7 @@
 
 
 
-void clear(void);
+void clear(void); 
 
 void max7219_init(void);
 void write_board(int board, int row, int data);	
