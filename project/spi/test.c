@@ -23,37 +23,46 @@
 #define DATA_LOW PORTA &= ~(1<<PA2)
 
 
+int display[8];
+
 
 void max7219_init(void);
-
+void spi_clear(void);
 void spi_write(int addr, int data);
+void send_byte(int byte);
 
-int main(int argc, char* argv[]) 
+void main(int argc, char* argv[]) 
 {
-	FILE *output;
-	uint16_t msg = 0x0155;
-	uint16_t msg2 = 0x0100;
-	uint16_t no_decode = 0x0900;
-	USART_SPI_init();
-	_delay_ms(500);
-	output = stdout;
+	int i;
 	max7219_init();
 	
-	while(1){
-
-	
-	
-
-
-
-	}
+	while(1) {
+		spi_write(0x01, 0)
+		_dealy_ms(500);
+		spi_write(0x01, 1)
+		_delay_ms(500);
+	}		
 }
 
-void max7219_init(void){
+void max7219_init(void)
+{
+	DDRA = 0xff;
+	spi_write(0x09, 0);
+	// Intensity: 3 (0-15)
+    	spi_write(0x0A, 1);
+    	// Scan limit: All "digits" (rows) on
+    	spi_write(0x0B, 7);
+    	// Shutdown register: Display on
+    	spi_write(0x0C, 1);
+    	// Display test: off
+    	spi_write(0x0F, 0);
+    	spi_clear();
 
 
 	
 }
+
+
 void spi_write(int addr, int data){	
 	CS_LOW();
 	
