@@ -1,5 +1,5 @@
 #VR programmer makefile
-OBJS= spi/test.c spi/spi.c
+OBJS= spi/test.c spi/spi.c led.c led.h
 AVR_CONF=-C ../avrdude_gpio.conf
 ACC=avr-gcc
 CHIP=atmega324pa
