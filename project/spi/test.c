@@ -65,18 +65,22 @@ void max7219_init(void)
 
 void spi_write(int addr, int data){	
 	CS_LOW();
-	
-
+	send_byte(addr);
+	send_byte(data);
+	CS_HIGH();	
 
 }
 
 void send_byte(int byte){
 	int ct = 0;
-	for(ct = 0;ct <8; ct++)
+	for(ct = 7;ct >= 0; ct++)
 	{
 		CLK_LOW();
-		
-
+		if(byte & (1<<ct)
+			DATA_HIGH();
+		else
+			DATA_LOW();		
+		CLK_HIGH();
 	}
 
 
