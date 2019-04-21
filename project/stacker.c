@@ -11,16 +11,16 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include <stdint.h>
-#define BOUNCE_DELAY 500
+#define BOUNCE_DELAY 1
 #define UPDATE write_board(board,currentRow, position)
 int position = 0x7E;
 uint8_t currentRow;
 uint8_t board = 0;
-uint8_t prevRow = 0xff;
+uint8_t prevPos = 0xff;
 int delay = 500;
 int main(int argc, char* argv[])
 {
-	int direction = 2; //tells direction of game movement
+	int direction = 1; //tells direction of game movement
 	/* Initialization */
 	max7219_init();
 	currentRow = 1;
@@ -44,15 +44,25 @@ int main(int argc, char* argv[])
 
 }
 
+void interrupt_init(void)
+{
+	SREG |= (1<<I); // Global Interrupt Enable
+	EICRA |= (1<<ISC01); // Falling Edge Trigger
+	EIMSK |= (1<<IINT0); // Enable Interrupt
+	PORTD |= (1<<PD2); // Enable Pull-up Resistor
+	
 
 ISR(INT0_vect)
 {
 	_delay_ms(BOUNCE_DELAY);
-	position += 2;
+	position &= prevPos;
+	prevPos = position;
+	if(++currentRow > 8) {
+		board++;
+		currentRow = 0;
+	}
 
-	currentRow &= prevRow;	
-	prevRow = currentRow;
-
+	EIFR = 0; // Clear interrupt flag
 }
 
 
