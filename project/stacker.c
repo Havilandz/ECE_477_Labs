@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 {
 	int direction = 1; //tells direction of game movement
 	/* Initialization */
-//	interrupt_init();
+	interrupt_init();
 	max7219_init();
 	currentRow = 1;
 	write_board(board,currentRow, position);
@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 
 void interrupt_init(void)
 {
-	SREG |= (1<<7); // Global Interrupt Enable
+	SREG &= (0<<7); // Global Interrupt Enable
 	EICRA |= (1<<ISC01); // Falling Edge Trigger
 	EIMSK |= (1<<INT0); // Enable Interrupt
 	PORTD |= (1<<PD2); // Enable Pull-up Resistor
