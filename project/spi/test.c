@@ -36,10 +36,13 @@ void main(int argc, char* argv[])
 	int i;
 	max7219_init();
 	
+		spi_write(0x01, 0xff);
+		spi_write(0x00, 0x0f);
+		spi_write(0x00, 0xa0);
+		spi_write(0x00, 0x0a);
+	
 	while(1) {
-		spi_write(0x01, 0)
-		_dealy_ms(500);
-		spi_write(0x01, 1)
+		
 		_delay_ms(500);
 	}		
 }
@@ -56,31 +59,41 @@ void max7219_init(void)
     	spi_write(0x0C, 1);
     	// Display test: off
     	spi_write(0x0F, 0);
-    	spi_clear();
+//    	spi_clear();
 
 
 	
 }
 
 
-void spi_write(int addr, int data){	
-	CS_LOW();
-	send_byte(addr);
-	send_byte(data);
-	CS_HIGH();	
+void write_row(int board, int row, int data){	
+	ct1 = 0;
+	ct2 = 0;
+	ct3 = 0;
+	CS_HIGH;
+
+
+
+
+
+
 
 }
 
+void noop(void){
+	send_byte(0);
+	send_byte(0);
+}
 void send_byte(int byte){
 	int ct = 0;
-	for(ct = 7;ct >= 0; ct++)
+	for(ct = 7;ct >= 0; ct--)
 	{
-		CLK_LOW();
-		if(byte & (1<<ct)
-			DATA_HIGH();
+		CLK_LOW;
+		if(byte & (1<<ct))
+			DATA_HIGH;
 		else
-			DATA_LOW();		
-		CLK_HIGH();
+			DATA_LOW;		
+		CLK_HIGH;
 	}
 
 
