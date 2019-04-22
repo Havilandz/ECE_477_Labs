@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 
 void interrupt_init(void)
 {
-	SREG &= (0<<7); // Global Interrupt Enable
+	SREG &= (1<<7); // Global Interrupt Enable
 	EICRA |= (1<<ISC01); // Falling Edge Trigger
 	EIMSK |= (1<<INT0); // Enable Interrupt
 	PORTD |= (1<<PD2); // Enable Pull-up Resistor
@@ -79,7 +79,12 @@ void interrupt_init(void)
 /* Interrupt Service Routine for the button */
 ISR(INT0_vect)
 {
-	_delay_ms(BOUNCE_DELAY); // Software Debounce
+	//check timer to make sure that an interrupt hasn't happened in X ms
+	//or disable interrupts for this then have a timer interrupt that 
+	//reenables it	
+	//clear timer to 0
+	//enable timer interrupt
+	//or just have the timer running all the time
 	position &= prevPos; // Check the previous row for overlap
 	prevPos = position; // Store data from the current row
 	if(++currentRow > 8) { // Handles moving from board to board
@@ -90,6 +95,7 @@ ISR(INT0_vect)
 	EIFR = 0; // Clear interrupt flag
 }
 
-
+//timer interrupt
+//sets button interrupt to work
 		
 		

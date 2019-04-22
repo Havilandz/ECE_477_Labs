@@ -35,5 +35,6 @@ void noop(void);
 /* writes two bytes using send_byte(). The first byte is the address 
 on the board, the second byte is the hex data for the corresponding column. */
 void spi_write(int addr,int  data);
-
+void spi_latch(int addr,int  data);
 #endif
+
