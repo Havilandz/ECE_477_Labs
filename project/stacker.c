@@ -8,6 +8,17 @@
  * Not stopping in time to line up the lights will shrink the width of the rows until the player
  * reaches the top or misses the tower. 
  *
+ * Hardware Notes:
+ *
+ * AVR: ATMEGA324PA
+ * Display: 4 MAX7219 8x8 Dot Matrix LED Display's Daisy-chained together
+ * Programmer: Raspberry Pi 3
+ *
+ * Both the MAX7219 and the ATMEGA324PA run on 5V DC.
+ * The project runs on one 9V battery.
+ * An LM7805 linear voltage regulator was used to step down the voltage to 5V.
+ *
+ * Connections detailed in pinout.txt
  */
 
 #include "spiBitBang.h"
