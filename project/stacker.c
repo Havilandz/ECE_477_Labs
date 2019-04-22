@@ -68,22 +68,15 @@ void interrupt_init(void)
 /* Interrupt Service Routine for the button */
 ISR(INT0_vect)
 {
-<<<<<<< HEAD
 	//check timer to make sure that an interrupt hasn't happened in X ms
 	//or disable interrupts for this then have a timer interrupt that 
 	//reenables it	
 	//clear timer to 0
 	//enable timer interrupt
 	//or just have the timer running all the time
-	position &= prevPos;
-	prevPos = position;
-	if(++currentRow > 8) {
-=======
-	_delay_ms(BOUNCE_DELAY); // Software Debounce
 	position &= prevPos; // Check the previous row for overlap
 	prevPos = position; // Store data from the current row
 	if(++currentRow > 8) { // Handles moving from board to board
->>>>>>> 23f86da02266f9c2a845c6313ffb6e5f9844eb73
 		board++;
 		currentRow = 0;
 	}
