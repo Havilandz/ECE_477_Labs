@@ -23,5 +23,6 @@ void write_row(int row, int data);
 void send_byte(int byte);
 void noop(void);
 void spi_write(int addr,int  data);
-
+void spi_latch(int addr,int  data);
 #endif
+

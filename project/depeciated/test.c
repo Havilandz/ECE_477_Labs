@@ -24,7 +24,7 @@
 
 
 
-void clear(void); 
+void clear(void);
 
 void max7219_init(void);
 void write_board(int board, int row, int data);	
@@ -32,18 +32,43 @@ void write_row(int row, int data);
 void send_byte(int byte);
 void noop(void);
 void spi_write(int addr,int  data);
-
+void spi_latch(int addr,int  data);
 void main(int argc, char* argv[]) 
 {
 	max7219_init();
+	int ct = 0;
+	int byte = 0x01;
+	while(1){
+
+/*	for(ct = 7;ct >= 0; ct--)
+	{
+		CLK_LOW;
+//		_delay_ms(500);
+		if(byte & (1<<ct)){
+			DATA_HIGH;
+//			_delay_ms(500);
+		}else{
+			DATA_LOW;		
+//			_delay_ms(500);
+		}
+		CLK_HIGH;
+//	_delay_ms(500);
+	}*/
+	_delay_ms(500);
+	CS_LOW;	
+	spi_write(0x05, 0xff&byte++);
+	CS_HIGH;
+/*
+	_delay_ms(500);
+	CS_LOW;	
+	spi_write(0x05, 0x00);
+	CS_HIGH;
+*/
 
 
-	write_board(0, 1, 0x7e);
 
-
-	while(1) {
 		
-		_delay_ms(500);
+	
 	}		
 }
 
@@ -51,20 +76,20 @@ void max7219_init(void)
 {
 	DDRA = 0xff;
 	int ct = 0;
-	CS_LOW;
-	for(ct = 0; ct<4; ct++){ 
-		spi_write(0x09, 0);
-		// Intensity: 3 (0-15)
-	    	spi_write(0x0A, 1);
-	    	// Scan limit: All "digits" (rows) on
-	    	spi_write(0x0B, 7);
-	    	// Shutdown register: Display on
-	    	spi_write(0x0C, 1);
-	    	// Display test: off
-    		spi_write(0x0F, 0);
+
+
+	//No decoding
+	spi_latch(0x09, 0);
+	// Intensity: 3 (0-15)
+    	spi_latch(0x0A, 1);
+    	// Scan limit: All "digits" (rows) on
+    	spi_latch(0x0B, 7);
+    	// Shutdown register: Display on
+    	spi_latch(0x0C, 1);
+    	// Display test: off
+	spi_latch(0x0F, 0);
     		
-	}
-	CS_HIGH;
+
 	clear();
 	clear();
 }
@@ -151,6 +176,13 @@ void spi_write(int addr,int  data){
 
 }
 
+void spi_latch(int addr,int  data){
+	CS_LOW;
+	send_byte(addr);
+	send_byte(data);
+	CS_HIGH;
+}
+
 void send_byte(int byte){
 	int ct = 0;
 	for(ct = 7;ct >= 0; ct--)
@@ -171,7 +203,7 @@ void clear(void){
     int i;
     for (i = 0; i < 8; i++) {
 	CS_LOW;
-	spi_write(i+1, 0);
+	spi_latch(i+1, 0);
 	CS_HIGH;
     }
 }
