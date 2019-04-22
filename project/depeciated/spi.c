@@ -6,12 +6,32 @@
 
 #include "spi.h"
 #include <avr/io.h>
+#include <stdio.h>
+#include <avr/interrupt.h>
+//Defines missing USART spi macros
+#ifndef UCPHA0
+#define UCPHA0 1
+#endif
+#ifndef UDORD0
+#define UDORD0 2
+#endif
 
+static FILE serial_stream = (FILE)FDEV_SETUP_STREAM(serial_write, serial_read, _FDEV_SETUP_RW);
 
 /* Initializes 3 Pin SPI on the USART pins of an AVR */
 void USART_SPI_init()
 {
-	UCSR0C |= (1<<UMSEL01) | (1<<UMSEL00); //Enable USART in SPI mode
+
+
+
+	UBRR0 = 0;
+	XCK_DDR |= (1<<XCK_BIT);
+
+	UCSR0C &= ~(1<<UCPHA0); // Set Clock Phase
+	UCSR0C &= ~(1<<UDORD0); // Set Big Endian (MSB)
+	//Set SPI mode 1
+	UCSR0C |= (1<<UMSEL01) | (1<<UMSEL00);
+
 
 	UCSR0B |= (1<<TXEN0); // Enable Transmitter
 
@@ -19,13 +39,13 @@ void USART_SPI_init()
 	UBRR0H |= (unsigned char)(UBRRN >> 8); 
 	UBRR0L |= (unsigned char)UBRRN;
 	
-	UCSR0C &= ~(1<<UCPHA0); // Set Clock Phase
-	UCSR0C &= ~(1<<UDORD0); // Set Big Endian (MSB)
-	
+
+	stdin = &serial_stream;
+	stdout = &serial_stream;	
 	
 }
 	
-/* Initializes SPI on an AVR */
+/* Initializes SPI on an AVR 
 void SPI_init()
 {
 	SPCR = 0; // Clear SPI control register
@@ -43,7 +63,7 @@ void SPI_init()
 
 	
 }
-
+*/
 //reads from serial input on stdin
 int  serial_read(FILE *fp)
 {
