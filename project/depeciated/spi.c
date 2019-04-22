@@ -21,6 +21,9 @@ static FILE serial_stream = (FILE)FDEV_SETUP_STREAM(serial_write, serial_read, _
 /* Initializes 3 Pin SPI on the USART pins of an AVR */
 void USART_SPI_init()
 {
+
+
+
 	UBRR0 = 0;
 	XCK_DDR |= (1<<XCK_BIT);
 
@@ -28,6 +31,7 @@ void USART_SPI_init()
 	UCSR0C &= ~(1<<UDORD0); // Set Big Endian (MSB)
 	//Set SPI mode 1
 	UCSR0C |= (1<<UMSEL01) | (1<<UMSEL00);
+
 
 	UCSR0B |= (1<<TXEN0); // Enable Transmitter
 

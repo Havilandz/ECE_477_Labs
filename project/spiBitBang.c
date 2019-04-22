@@ -27,6 +27,7 @@ void max7219_init(void)
 	spi_latch(0x0F, 0);
     		
 
+	/* clear the matrix display */
 	clear();
 	clear();
 }
@@ -37,7 +38,7 @@ void write_board(int board, int row, int data){
 	int ct = 0;
 	
 	switch(board){
-	case 0:
+	case 0: // Bottom Board
 		for(ct = 8; ct>0; ct--){
 			CS_LOW;
 			noop();
@@ -50,7 +51,7 @@ void write_board(int board, int row, int data){
 			CS_HIGH;
 		}
 		break;
-	case 1:
+	case 1: // 2nd Board up
 		for(ct = 8; ct>0; ct--){
 			CS_LOW;
 			noop();
@@ -63,7 +64,7 @@ void write_board(int board, int row, int data){
 			CS_HIGH;
 		}	
 		break;
-	case 2:
+	case 2: // 3rd board up
 		for(ct = 8; ct>0; ct--){
 			CS_LOW;
 			noop();
@@ -76,7 +77,7 @@ void write_board(int board, int row, int data){
 			CS_HIGH;
 		}
 		break;
-	case 3:
+	case 3: // Top board
 		for(ct = 8; ct>0; ct--){
 			CS_LOW;
 			if(data & 1<<(ct-1))
