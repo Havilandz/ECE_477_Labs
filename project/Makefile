@@ -1,4 +1,4 @@
-#VR programmer makefile
+#AVR programmer makefile
 OBJS= stacker.c spiBitBang.c
 AVR_CONF=-C ../avrdude_gpio.conf
 ACC=avr-gcc
