@@ -49,6 +49,7 @@ void write_board(int board, int row, int data){
 			else
 				spi_write(ct, 0<<(row-1));
 			CS_HIGH;
+
 		}
 		break;
 	case 1: // 2nd Board up
