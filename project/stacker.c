@@ -31,7 +31,7 @@
 
 /* Variable Declaration */
 int position = 0x7E; // The hex value of the current row
-uint8_t currentRow = 1; // The position of the current row
+uint8_t currentRow = 0x1; // The position of the current row
 uint8_t board = 0; // The board where the current row is
 uint8_t prevPos = 0xff; // The previous row's position
 int delay = 500; // Controls the speed of the row movement
@@ -77,12 +77,12 @@ void delay(unsigned char n)
 
 void interrupt_init(void)
 {
-	SREG &= (1<<7); // Global Interrupt Enable
+	SREG |= (1<<7); // Global Interrupt Enable
 	EICRA |= (1<<ISC01); // Falling Edge Trigger
 	EIMSK |= (1<<INT0); // Enable Interrupt
 	PORTD |= (1<<PD2); // Enable Pull-up Resistor
 	TCCR0B = (1<<CS02) | (1<<CS00);	// Sets Period to 128us
-	OCR0A = 23; // ~3ms delay
+	OCR0A = 200;//~25ms
 	TIMSK0 |= (1<<OCIE0A); // Enable Timer Interrupt
 	
 }
@@ -91,6 +91,7 @@ ISR(INT0_vect)
 {
 	if(flag) 
 		return;
+	EIMSK &= (0<<INT0); //temporarily disable interrupt
 	TCNT0 = 0;
 	flag = 0;
 	//check timer to make sure that an interrupt hasn't happened in X ms
@@ -113,6 +114,7 @@ ISR(INT0_vect)
 		
 ISR(TIMER0_COMPA_vect)
 {
+	EIMSK |= (1<<INT0); // Enable Interrupt
 	flag = 0;
 }
 
