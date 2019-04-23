@@ -23,7 +23,7 @@ void clear(void);
 void max7219_init(void);
 
 /* writes data to a specific 8x8 matrix using spi_write() */
-void write_board(int board, int* data);	
+void write_board(int board, unsigned char *data);	
 
 /* sends one byte of data via bit bang spi */
 void send_byte(int byte);

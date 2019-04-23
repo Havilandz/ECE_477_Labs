@@ -33,7 +33,7 @@ void max7219_init(void)
 }
 
 
-void write_board(int board, int* data){	
+void write_board(int board, unsigned char *data){	
 	
 	int ct = 0;
 	
@@ -44,7 +44,7 @@ void write_board(int board, int* data){
 			noop();
 			noop();
 			noop();
-			spi_write(ct, data[ct-1])	
+			spi_write(ct, data[ct-1]);	
 			CS_HIGH;
 		}
 		break;
@@ -53,7 +53,7 @@ void write_board(int board, int* data){
 			CS_LOW;
 			noop();
 			noop();
-			spi_write(ct, data[ct-1])	
+			spi_write(ct, data[ct-1]);	
 			noop();
 			CS_HIGH;
 		}	
@@ -62,7 +62,7 @@ void write_board(int board, int* data){
 		for(ct = 8; ct>0; ct--){
 			CS_LOW;
 			noop();
-			spi_write(ct, data[ct-1])	
+			spi_write(ct, data[ct-1]);	
 			noop();
 			noop();
 			CS_HIGH;
@@ -71,7 +71,7 @@ void write_board(int board, int* data){
 	case 3: // Top board
 		for(ct = 8; ct>0; ct--){
 			CS_LOW;
-			spi_write(ct, data[ct-1])	
+			spi_write(ct, data[ct-1]);
 			noop();
 			noop();
 			noop();

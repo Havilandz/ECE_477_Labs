@@ -26,27 +26,32 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include <stdint.h>
-#define BOUNCE_DELAY 1
-#define UPDATE write_board(board,currentRow, position)
+#define UPDATE write_board(board, board_data)
 
 /* Variable Declaration */
 int position = 0x7E; // The hex value of the current row
-uint8_t currentRow = 1; // The position of the current row
+uint8_t currentRow = 0; // The position of the current row
 uint8_t board = 0; // The board where the current row is
 uint8_t prevPos = 0xff; // The previous row's position
 int flag = 0; // Timer flag
-volatile int time = 40;
+
+uint8_t board_data[8] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};// The previous row's position
+int time = 30;
+/* Translates row data to cloumn data */
+void translate(uint8_t row_data, uint8_t row_num);
 /* Initializes the hardware interrupt for the button */
 void interrupt_init(void);
+//Delay function
 void delay(unsigned char n);
-
+//clears out the board data
+void clear_data();
 int main(int argc, char* argv[])
 {
 	/* Initialization */
 	int direction = 1; // Starts the row moving from left to right
 	interrupt_init();
 	max7219_init();
-	write_board(board,currentRow, position);
+	write_board(board, board_data);
 	
 	/* Main Loop */
 
@@ -61,12 +66,25 @@ int main(int argc, char* argv[])
 		}else{
 			position /= 2;
 		}
-		
+		translate(position, currentRow);
 		UPDATE;	
 		delay(time);
 		
 	}
 
+}
+//pushes row data on to data array of column data
+void translate(uint8_t row_data, uint8_t row_num)
+{
+	int i = 0;
+	for(i = 7; i >= 0; i--) {
+		if(row_data & (1<<i)) {
+			board_data[i] |= (1<<row_num);
+		}
+		else {
+			board_data[i] &= ~(1<<row_num);
+		}
+	}
 }
 
 void delay(unsigned char n)
@@ -89,18 +107,18 @@ void interrupt_init(void)
 /* Interrupt Service Routine for the button */
 ISR(INT0_vect)
 {
-	if(flag) 
-		return;
-	EIMSK &= (0<<INT0); //temporarily disable interrupt
+//	if(flag) 
+//		return;
+	EIMSK &= ~(1<<INT0); //temporarily disable interrupt
 	TCNT0 = 0;
 	flag = 1; //sets flag to temporarily disable interrupts
 	time--; //
-
 	position &= prevPos; // Check the previous row for overlap
 	prevPos = position; // Store data from the current row
-	if(++currentRow > 8) { // Handles moving from board to board
+	if(++currentRow > 7) { // Handles moving from board to board
 		board++;
 		currentRow = 0;
+		clear_data();
 	}
 	EIFR = 0; // Clear interrupt flag
 }
@@ -114,3 +132,10 @@ ISR(TIMER0_COMPA_vect)
 	flag = 0;
 }
 
+void clear_data(void)
+{
+	int ct = 0;
+	for(ct = 0; ct<8; ct++){
+		board_data[ct] = 0;
+	}
+}
