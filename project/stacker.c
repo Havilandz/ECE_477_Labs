@@ -31,7 +31,7 @@
 
 /* Variable Declaration */
 int position = 0x7E; // The hex value of the current row
-uint8_t currentRow = 1; // The position of the current row
+uint8_t currentRow = 0x1; // The position of the current row
 uint8_t board = 0; // The board where the current row is
 uint8_t prevPos = 0xff; // The previous row's position
 int delay = 500; // Controls the speed of the row movement
