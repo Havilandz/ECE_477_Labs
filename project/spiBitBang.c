@@ -33,7 +33,7 @@ void max7219_init(void)
 }
 
 
-void write_board(int board, int row_data, int data){	
+void write_board(int board, int* data){	
 	
 	int ct = 0;
 	
@@ -44,12 +44,8 @@ void write_board(int board, int row_data, int data){
 			noop();
 			noop();
 			noop();
-			if(data & 1<<(ct-1))	
-				spi_write(ct, row_data);
-			else
-				spi_write(ct, 0<<(row-1));
+			spi_write(ct, data[ct-1])	
 			CS_HIGH;
-
 		}
 		break;
 	case 1: // 2nd Board up
@@ -57,10 +53,7 @@ void write_board(int board, int row_data, int data){
 			CS_LOW;
 			noop();
 			noop();
-			if(data & 1<<(ct-1))
-				spi_write(ct, row_data);
-			else
-				spi_write(ct, 0<<(row-1));
+			spi_write(ct, data[ct-1])	
 			noop();
 			CS_HIGH;
 		}	
@@ -69,10 +62,7 @@ void write_board(int board, int row_data, int data){
 		for(ct = 8; ct>0; ct--){
 			CS_LOW;
 			noop();
-			if(data & 1<<(ct-1))
-				spi_write(ct, row_data);
-			else
-				spi_write(ct, 0<<(row-1));
+			spi_write(ct, data[ct-1])	
 			noop();
 			noop();
 			CS_HIGH;
@@ -81,10 +71,7 @@ void write_board(int board, int row_data, int data){
 	case 3: // Top board
 		for(ct = 8; ct>0; ct--){
 			CS_LOW;
-			if(data & 1<<(ct-1))
-				spi_write(ct, row_data);
-			else
-				spi_write(ct, 0<<(row-1));
+			spi_write(ct, data[ct-1])	
 			noop();
 			noop();
 			noop();

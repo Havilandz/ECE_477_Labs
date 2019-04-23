@@ -31,14 +31,14 @@
 
 /* Variable Declaration */
 int position = 0x7E; // The hex value of the current row
-uint8_t currentRow = 0x1; // The position of the current row
+uint8_t currentRow = 1; // The position of the current row
 uint8_t board = 0; // The board where the current row is
 uint8_t prevPos = 0xff; // The previous row's position
-int delay = 500; // Controls the speed of the row movement
 int flag = 0; // Timer flag
-int time = 40;
+volatile int time = 40;
 /* Initializes the hardware interrupt for the button */
 void interrupt_init(void);
+void delay(unsigned char n);
 
 int main(int argc, char* argv[])
 {
@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 		}
 		
 		UPDATE;	
-		delay(time--);
+		delay(time);
 		
 	}
 
@@ -93,13 +93,9 @@ ISR(INT0_vect)
 		return;
 	EIMSK &= (0<<INT0); //temporarily disable interrupt
 	TCNT0 = 0;
-	flag = 0;
-	//check timer to make sure that an interrupt hasn't happened in X ms
-	//or disable interrupts for this then have a timer interrupt that 
-	//reenables it	
-	//clear timer to 0
-	//enable timer interrupt
-	//or just have the timer running all the time
+	flag = 1; //sets flag to temporarily disable interrupts
+	time--; //
+
 	position &= prevPos; // Check the previous row for overlap
 	prevPos = position; // Store data from the current row
 	if(++currentRow > 8) { // Handles moving from board to board
