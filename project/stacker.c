@@ -34,24 +34,30 @@ uint8_t currentRow = 0; // The position of the current row
 uint8_t board = 0; // The board where the current row is
 uint8_t prevPos = 0xff; // The previous row's position
 int flag = 0; // Timer flag
-
 uint8_t board_data[8] = {0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01};// The previous row's position
-int time = 30;
+int time = 30; // Speed multiplier
+
 /* Translates row data to cloumn data */
 void translate(uint8_t row_data, uint8_t row_num);
+
 /* Initializes the hardware interrupt for the button */
 void interrupt_init(void);
+
 //Delay function
 void delay(unsigned char n);
+
 //clears out the board data
 void clear_data();
+
 int main(int argc, char* argv[])
 {
 	/* Initialization */
 	int direction = 1; // Starts the row moving from left to right
+	
 	interrupt_init();
 	max7219_init();
-	write_board(board, board_data);
+	
+	write_board(board, board_data); // Set up first row
 	
 	/* Main Loop */
 
@@ -73,7 +79,7 @@ int main(int argc, char* argv[])
 	}
 
 }
-//pushes row data on to data array of column data
+
 void translate(uint8_t row_data, uint8_t row_num)
 {
 	int i = 0;
@@ -104,35 +110,41 @@ void interrupt_init(void)
 	TIMSK0 |= (1<<OCIE0A); // Enable Timer Interrupt
 	
 }
+
 /* Interrupt Service Routine for the button */
 ISR(INT0_vect)
 {
-//	if(flag) 
-//		return;
 	EIMSK &= ~(1<<INT0); //temporarily disable interrupt
-	TCNT0 = 0;
+	
+	TCNT0 = 0; // Reset the timer 
+	
 	flag = 1; //sets flag to temporarily disable interrupts
-	if(time>8)
+	
+	if(time>8) // Controls speed up
 		time = time-2; 
+	
 	position &= prevPos; // Check the previous row for overlap
+	
 	prevPos = position; // Store data from the current row
-	translate(position, currentRow);
-	write_board(board, board_data);
+	
+	translate(position, currentRow); // Pushes position data to array
+	
+	write_board(board, board_data); // Move to the next row
+	
 	if(++currentRow > 7) { // Handles moving from board to board
 		board++;
 		currentRow = 0;
 		clear_data();
 	}
+	
 	EIFR = 0; // Clear interrupt flag
 }
 
-//timer interrupt
-//sets button interrupt to work
-		
+/* Timer Interrupt Service Routine */		
 ISR(TIMER0_COMPA_vect)
 {
 	EIMSK |= (1<<INT0); // Enable Interrupt
-	flag = 0;
+	flag = 0; // Clear interrupt disable flag
 }
 
 void clear_data(void)
