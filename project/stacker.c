@@ -27,19 +27,20 @@
 #include <avr/interrupt.h>
 #include <stdint.h>
 #define BOUNCE_DELAY 1
-#define UPDATE write_board(board,currentRow, position)
+#define UPDATE write_board(&prev)
 
 /* Variable Declaration */
 int position = 0x7E; // The hex value of the current row
 uint8_t currentRow = 0x1; // The position of the current row
 uint8_t board = 0; // The board where the current row is
-uint8_t prevPos = 0xff; // The previous row's position
+uint8_t prev[8] = {0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80};// The previous row's position
 int delay = 500; // Controls the speed of the row movement
 int flag = 0; // Timer flag
 int time = 20;
 /* Initializes the hardware interrupt for the button */
 void interrupt_init(void);
-
+/* Translates row data to cloumn data */
+void translate(uint8_t row_data, uint8_t row_num);
 int main(int argc, char* argv[])
 {
 	/* Initialization */
@@ -61,12 +62,24 @@ int main(int argc, char* argv[])
 		}else{
 			position /= 2;
 		}
-		
+		translate(position, currentRow);
 		UPDATE;	
 		delay(time--);
 		
 	}
 
+}
+
+void translate(uint8_t row_data, row_num)
+{
+	for(i = 7; i >= 0; i--) {
+		if(row_data & (1<<i)) {
+			prev[i] |= (1<<row_num);
+		}
+		else {
+			prev[i] &= ~(1<<row_num);
+		}
+	}
 }
 
 void delay(unsigned char n)
