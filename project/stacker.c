@@ -36,6 +36,7 @@ uint8_t board = 0; // The board where the current row is
 uint8_t prevPos = 0xff; // The previous row's position
 int delay = 500; // Controls the speed of the row movement
 int flag = 0; // Timer flag
+int time = 40;
 /* Initializes the hardware interrupt for the button */
 void interrupt_init(void);
 
@@ -62,10 +63,16 @@ int main(int argc, char* argv[])
 		}
 		
 		UPDATE;	
-		_delay_ms(500);
+		delay(time--);
 		
 	}
 
+}
+
+void delay(unsigned char n)
+{
+	while(n--)
+	_delay_ms(25);
 }
 
 void interrupt_init(void)
