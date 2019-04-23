@@ -115,6 +115,8 @@ ISR(INT0_vect)
 	time--; //
 	position &= prevPos; // Check the previous row for overlap
 	prevPos = position; // Store data from the current row
+	translate(position, currentRow);
+	write_board(board, board_data);
 	if(++currentRow > 7) { // Handles moving from board to board
 		board++;
 		currentRow = 0;
