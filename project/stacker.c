@@ -112,7 +112,8 @@ ISR(INT0_vect)
 	EIMSK &= ~(1<<INT0); //temporarily disable interrupt
 	TCNT0 = 0;
 	flag = 1; //sets flag to temporarily disable interrupts
-	time--; //
+	if(time>8)
+		time = time-2; 
 	position &= prevPos; // Check the previous row for overlap
 	prevPos = position; // Store data from the current row
 	translate(position, currentRow);
