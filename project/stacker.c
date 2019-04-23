@@ -8,6 +8,8 @@
  * Not stopping in time to line up the lights will shrink the width of the rows until the player
  * reaches the top or misses the tower. 
  *
+ * Once the player reaches the top, the program has undefined behavior... BEWARE!
+ *
  * Hardware Notes:
  *
  * AVR: ATMEGA324PA
