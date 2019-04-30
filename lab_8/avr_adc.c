@@ -11,8 +11,8 @@
 
 void initPS(void)
 {
-	ADMUX |= (1<<REFS0); //ADC reference set to avcc
-	ADMUX |= ((1<<MUX4)|(1<<MUX3)|(1<<MUX2)|(1<<MUX1)); //Sets ADC input to 1.1V bandgap reference. 
+	ADMUX |= (1<<REFS0)|(1<<REFS1); // Set the reference voltage to 1.1V
+	ADMUX |= ((1<<MUX3)|(0<<MUX2)|(0<<MUX1)|(0<<MUX0)); // Enable the Temperature sensor
 //	ADMUX |= (1<<ADLAR); //sets left alligned outputs
 	//Sets 1/64 prescaler, ADC clock frequency is 125kHz
 	ADCSRA |= ((1<<ADPS2)|(1<<ADPS1));
