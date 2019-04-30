@@ -1,0 +1,19 @@
+FUNCTION	AVR PIN 	PHYSICAL RPi PIN
+
+MOSI		6		16
+MISO		7		12
+SCLK		8		18
+RESET		1		32
+VCC		7		1
+GND		8		6
+TxRx1		14		8
+TxRx2		15		10
+LED0		22		n/a
+LED1		23		n/a
+LED2		24		n/a
+LED3		25		n/a
+LED4		26		n/a
+LED5		27		n/a
+LED6		28		n/a
+LED7		29		n/a
+AREF CAP	32		n/a
