@@ -1,8 +1,7 @@
 # ECE_477_Labs
-labs for ece477
+labs for Hardware Applications in C class, ECE477
 
-
-
+project foler contains Handheld 'Stacker' Game code
 
 
 
